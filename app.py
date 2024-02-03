@@ -23,11 +23,10 @@ def reg_handle():
         uname = request.form.get("uname")
         upass = request.form.get("upass")
         upass2 = request.form.get("upass2")
-        phone = request.form.get("phone")
         verify_code = request.form.get("verify_code")
         email = request.form.get("email")
 
-        if not (uname and uname.strip() and upass and upass2 and phone and verify_code and email):
+        if not (uname and uname.strip() and upass and upass2 and verify_code and email):
             abort(500)
 
         # if re.search(r"[\u4E00-\u9FFF]", uname):
@@ -47,15 +46,12 @@ def reg_handle():
         if not (len(upass) >= 6 and len(upass) <= 15 and upass == upass2):
             abort(Response("密码错误！"))
 
-        if session.get(phone) != verify_code:
-            abort(Response("短信验证码错误！"))
-
         if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
             abort(Response("邮箱格式错误！"))
 
         try:
             cur = db.cursor()
-            cur.execute("INSERT INTO mb_user VALUES (default, %s, md5(%s), %s, %s, sysdate(), sysdate(), '1', '1')", (uname, uname + upass, phone, email))
+            cur.execute("INSERT INTO mb_user VALUES (default, %s, md5(%s), %s, sysdate(), sysdate(), '1', '1')", (uname, upass, email))
             cur.close()
             db.commit()
         except:
