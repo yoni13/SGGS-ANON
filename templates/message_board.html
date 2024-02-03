@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>欢迎使用留言板！</title>
+        <title>歡迎使用留言板!</title>
 
         <style>
             * {
@@ -42,13 +42,13 @@
         <div id="mb_form">
             <form action="/message_board" method="POST">
                 <table>
-                    <tr><td>留言：</td><td><textarea id="content" name="content" placeholder="请输入留言内容"></textarea></td></tr>
-                    <tr><td></td><td><button type="submit">提交</button></td></tr>
+                    <tr><td>留言：</td><td><textarea id="content" name="content" placeholder="請輸入留言內容"></textarea></td></tr>
+                    <tr><td></td><td><button type="submit">送出</button></td></tr>
                 </table>
             </form>
         </div>
         {% else %}
-        <p>想留言？请<a href="/login">登录</a>！</p>
+        <p>想留言?<a href="/login">登入</a>！</p>
         {% endif %}
         <hr>
         {% for m in messages %}

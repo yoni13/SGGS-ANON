@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>用户中心</title>
+        <title>使用者中心</title>
 
         <style>
             * {
@@ -43,7 +43,7 @@
                         url: "/logout",
                         success: function(data){
                             if (data["err"] === 0) {
-                                alert("注销登录成功！");
+                                alert("登出成功！");
                                 location.href = "/login";
                             }
                         }

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>欢迎登录！</title>
+        <title>歡迎登入!</title>
 
         <style>
             * {
@@ -37,15 +37,15 @@
     <body>
         {% if login_fail %}
         <script>
-            alert("用户名或密码错误，请重新登录！");
+            alert("使用者名稱或密碼錯誤，請重新登入!");
         </script>
         {% endif %}
         <div id="reg_form">
             <form action="/login" method="POST">
                 <table>
-                    <tr><td>用户名：</td><td><input type="text" id="uname" name="uname" placeholder="用户名" autofocus></td></tr>
-                    <tr><td>密码：</td><td><input type="password" id="upass" name="upass" placeholder="登录密码"></td></tr>
-                    <tr><td></td><td><button type="submit">登录</button></td></tr>
+                    <tr><td>使用者名稱：</td><td><input type="text" id="uname" name="uname" placeholder="使用者名稱" autofocus></td></tr>
+                    <tr><td>密碼：</td><td><input type="password" id="upass" name="upass" placeholder="密碼"></td></tr>
+                    <tr><td></td><td><button type="submit">登入</button></td></tr>
                 </table>
             </form>
         </div>
