@@ -9,6 +9,24 @@ app = Flask(__name__)
 app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
 # app.secret_key = os.urandom(24)  # 在多进程环境下有问题，session获取不了，因为每个进程的secret_key不一样，无法解密cookie
 
+
+from flask_mail import Mail, Message
+
+app.config.update(
+    DEBUG=False,
+    # EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_DEFAULT_SENDER=('admin', 'xxxxxx@gmail.com'),
+    MAIL_MAX_EMAILS=10,
+    MAIL_USERNAME='xxxxxxx@gmail.com',
+    MAIL_PASSWORD='xxxxxxxxx'
+)
+
+mail = Mail(app)
+
+
 db = pymysql.connect(host="localhost", user="root", password="sggsanon88576", database="message", charset="utf8")
 
 @app.route("/")
@@ -148,12 +166,11 @@ def login_handle():
                 "uid": res[0],
                 "uname": res[1],
                 "upass": res[2],
-                "phone": res[3],
-                "email": res[4],
-                "reg_time": res[5],
-                "last_login_time": res[6],
-                "priv": res[7],
-                "state": res[8],
+                "email": res[3],
+                "reg_time": res[4],
+                "last_login_time": res[5],
+                "priv": res[6],
+                "state": res[7],
                 "cur_login_time": cur_login_time
             }
 
@@ -191,7 +208,7 @@ def check_uname():
 
     return jsonify(res)
 
-
+'''
 @app.route("/send_sms_code")
 def send_sms_code_handle():
     phone = request.args.get("phone")
@@ -207,12 +224,6 @@ def send_sms_code_handle():
     return jsonify(result)
 
 def send_sms_code(phone):
-    '''
-    函数功能：发送短信验证码（6位随机数字）
-    函数参数：
-    phone 接收短信验证码的手机号
-    返回值：发送成功返回验证码，失败返回False
-    '''
     verify_code = str(random.randint(100000, 999999))
 
     try:
@@ -228,7 +239,7 @@ def send_sms_code(phone):
         f = urllib.request.urlopen(url, params)
         content = f.read()
         res = json.loads(content)
-        
+
         print(res)
 
         if res and res['error_code'] == 0:
@@ -236,7 +247,15 @@ def send_sms_code(phone):
         else:
             return False
     except:
-        return False   
+        return False
+'''
+def send_email_verify_code():
+    verify_code = str(random.randint(100000,999999))
+
+    
+
+
+
 
 
 if __name__ == "__main__":
