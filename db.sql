@@ -1,5 +1,3 @@
-DROP TABLE mb_message;
-DROP TABLE mb_user;
 
 
 CREATE TABLE mb_user (

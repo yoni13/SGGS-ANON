@@ -6,10 +6,10 @@ from flask import Flask, render_template, request, jsonify, session, abort, redi
 import pymysql
 
 app = Flask(__name__)
-app.secret_key = b'\xa3P\x05\x1a\xf8\xc6\xff\xa4!\xd2\xb5\n\x96\x05\xed\xc3\xc90=\x07\x8d>\x8e\xeb'
+app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
 # app.secret_key = os.urandom(24)  # 在多进程环境下有问题，session获取不了，因为每个进程的secret_key不一样，无法解密cookie
 
-db = pymysql.connect(host="localhost", user="message_board", password="******", database="message_board", charset="utf8")
+db = pymysql.connect(host="localhost", user="root", password="sggsanon88576", database="message", charset="utf8")
 
 @app.route("/")
 def index():
@@ -35,11 +35,11 @@ def reg_handle():
 
         if not re.fullmatch("[a-zA-Z0-9_]{4,20}", uname):
             abort(Response("用户名不合法！"))
-        
+
         cur = db.cursor()
         cur.execute("SELECT uid FROM mb_user WHERE uname=%s", (uname,))
         res = cur.rowcount
-        cur.close()      
+        cur.close()
         if res != 0:
             abort(Response("用户名已被注册！"))
 
@@ -68,7 +68,7 @@ def reg_handle():
 @app.route("/user_center")
 def user_center():
     user_info = session.get("user_info")
-    
+
     print(user_info)
     print(session)
 
@@ -84,7 +84,6 @@ def logout_handle():
         session.pop("user_info")
         res["err"] = 0
         res["desc"] = "注销成功！"
-    
     return jsonify(res)
 
 @app.route("/message_board", methods=["GET", "POST"])
@@ -93,7 +92,7 @@ def message_board_handle():
         cur = db.cursor()
         cur.execute("SELECT uname, pub_time, content, cid FROM mb_user, mb_message WHERE mb_user.uid = mb_message.uid")
         res = cur.fetchall()
-        cur.close()        
+        cur.close()
         return render_template("message_board.html", messages=res)
     elif request.method == "POST":
         user_info = session.get("user_info")
@@ -117,7 +116,7 @@ def message_board_handle():
                     return "留言成功！"
                 except Exception as e:
                     print(e)
-                    
+
         abort(Response("留言失败！"))
 
 @app.route("/login", methods=["GET", "POST"])
@@ -138,13 +137,13 @@ def login_handle():
 
         # 密码长度介于6-15
         if not (len(upass) >= 6 and len(upass) <= 15):
-            abort(Response("密码不合法！"))    
-        
+            abort(Response("密码不合法！"))
+
         cur = db.cursor()
-        cur.execute("SELECT * FROM mb_user WHERE uname=%s AND upass=MD5(%s)", (uname, uname + upass))
+        cur.execute("SELECT * FROM mb_user WHERE uname=%s AND upass=MD5(%s)", (uname,upass))
         res = cur.fetchone()
         cur.close()
-              
+
         if res:
             # 登录成功就跳转到用户个人中心
             cur_login_time = datetime.datetime.now()
@@ -169,7 +168,7 @@ def login_handle():
                 db.commit()
             except Exception as e:
                 print(e)
-            
+
             print("登录成功！", session)
             # return redirect(url_for("user_center"))
             return redirect("/user_center")
@@ -245,5 +244,5 @@ def send_sms_code(phone):
 
 
 if __name__ == "__main__":
-    app.run(port=80, debug=True)
+    app.run(port=8080, debug=True,host='0.0.0.0')
 
