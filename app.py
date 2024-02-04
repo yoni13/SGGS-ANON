@@ -20,12 +20,12 @@ app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\
 app.config.update(
     DEBUG=False,
     # EMAIL SETTINGS
-    MAIL_SERVER='smtp.gmail.com',
-    MAIL_PORT=465,
+    MAIL_SERVER='smtp-relay.brevo.com',
+    MAIL_PORT=587,
     MAIL_USE_SSL=True,
     MAIL_DEFAULT_SENDER=('admin', 'xxxxxx@gmail.com'),
     MAIL_MAX_EMAILS=10,
-    MAIL_USERNAME='xxxxxxx@gmail.com',
+    MAIL_USERNAME='yoni980807@gmail.com',
     MAIL_PASSWORD='xxxxxxxxx'
 )
 
