@@ -55,8 +55,8 @@ def reg_handle():
         if not (uname and uname.strip() and upass and upass2 and verify_code and email):
             abort(500)
 
-        # if re.search(r"[\u4E00-\u9FFF]", uname):
-        #     abort(Response("用户名含有中文汉字！"))
+        if re.search(r"[\u4E00-\u9FFF]", uname):
+            abort(Response("中文名稱請使用英文名稱！"))
 
         if not re.fullmatch("[a-zA-Z0-9_]{4,20}", uname):
             abort(Response("帳號名稱請介於4-20個字，且僅接受英文、數字、和底線"))
@@ -84,7 +84,6 @@ def reg_handle():
         except:
             abort(Response("註冊失敗！"))
 
-        session.pop(phone)
         # 注册成功就跳转到登录页面
         return redirect(url_for("login_handle"))
 
@@ -108,7 +107,7 @@ def logout_handle():
     if session.get("user_info"):
         session.pop("user_info")
         res["err"] = 0
-        res["desc"] = "註銷成功！"
+        res["desc"] = "登出成功！"
     return jsonify(res)
 
 
@@ -227,21 +226,22 @@ def check_uname():
     return jsonify(res)
 
 
-'''
-@app.route("/send_sms_code")
-def send_sms_code_handle():
-    phone = request.args.get("phone")
+@app.route("/send_email_code")
+def send_email_code_handle():
+    email = request.args.get("email")
 
     result = {"err": 1, "desc": "内部错误！"}
-    verify_code = send_sms_code(phone)
+    verify_code = send_email_verify_code(email)
     if verify_code:
         # 发送短信验证码成功
-        session[phone] = verify_code
+        session[email] = verify_code
         result["err"] = 0
         result["desc"] = "发送短信验证码成功！"
 
     return jsonify(result)
 
+
+'''
 def send_sms_code(phone):
     verify_code = str(random.randint(100000, 999999))
 
