@@ -31,8 +31,6 @@
                padding-top: 10px;
             }
         </style>
-        <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/common.js') }}"></script>
     </head>
     <body>
         <div id="reg_form">
@@ -41,12 +39,12 @@
                     <tr><td>使用者名稱：</td><td><input type="text" id="uname" name="uname" placeholder="使用者名稱" autofocus><span id="uname_tips"></span></td></tr>
                     <tr><td>密碼：</td><td><input type="password" id="upass" name="upass" placeholder="密碼"></td></tr>
                     <tr><td>確認密碼：</td><td><input type="password" id="upass2" name="upass2" placeholder="確認密碼"></td></tr>
-                    <tr><td>手機號碼：</td><td><input type="text" id="phone" name="phone" placeholder="手機號碼"><button type="button" id="send_sms_code">發驗證碼</button></td></tr>
+                    <tr><td>電子郵件：</td><td><input type="email" id="email" name="email" placeholder="電子郵件"><button type="button" id="send_email_code">發驗證碼</button></td></tr>
                     <tr><td>驗證碼</td><td><input type="text" id="verify_code" name="verify_code" placeholder="驗證碼"></td></tr>
-                    <tr><td>電子郵件：</td><td><input type="email" id="email" name="email" placeholder="電子郵件""></td></tr>
-                    <tr><td></td><td><button type="submit">註冊</button></td></tr>
+                    <tr><td><button type="submit">註冊</button></td></tr>
                 </table>
             </form>
         </div>
+        <script src="{{ url_for('static', filename='js/common.js') }}"></script>
     </body>
 </html>

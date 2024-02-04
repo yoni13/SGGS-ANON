@@ -35,26 +35,10 @@
                padding-top: 10px;
             }
         </style>
-        <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
-        <script>
-            $(function(){
-                $("#logout").click(function(){
-                    $.ajax({
-                        url: "/logout",
-                        success: function(data){
-                            if (data["err"] === 0) {
-                                alert("登出成功！");
-                                location.href = "/login";
-                            }
-                        }
-                    });
-                });
-            });
-        </script>
     </head>
     <body>
         <div id="welcome">
-            <span>{{ uname }}，你好！</span><a href="/message_board">留言板</a><a id="logout" href="javascript:;">残忍离开</a>
+            <span>{{ uname }}，你好！</span><a href="/message_board">留言板</a><a id="logout" href="/logout">残忍离开</a>
         </div>
     </body>
 </html>
