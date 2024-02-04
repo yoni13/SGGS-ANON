@@ -13,10 +13,10 @@ send_email_code.onclick = function() {
     }).then(function(response) {
         return response.json();
     }).then(function(data) {
-        if (data['status'] == 200) {
-            alert('验证码发送成功');
+        if (data['err'] == 0) {
+            alert('驗證碼已發送到您的郵箱，請查收');
         } else {
-            alert(data['msg']);
+            alert('發送失敗');
         }
     });
 }
