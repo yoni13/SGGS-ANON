@@ -9,6 +9,7 @@ import json
 import urllib.parse
 import urllib.request
 import hashlib
+from markupsafe import escape
 
 app = Flask(__name__)
 app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
@@ -114,7 +115,7 @@ def message_board_handle():
 
         content = request.form.get("content")
         if content:
-            content = content.strip()
+            content = escape(content.strip())
             if 0 < len(content) <= 200:
                 db.mb_message.insert_one({
                     "uname": user_info.get("uname"),
