@@ -4,6 +4,6 @@ gunicorn
 itsdangerous
 Jinja2
 MarkupSafe
-PyMySQL
+pymongo
 Werkzeug
 flask-mail
