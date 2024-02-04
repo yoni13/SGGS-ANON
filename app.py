@@ -17,16 +17,16 @@ app.config.update(
     DEBUG=False,
     MAIL_SERVER='smtp-relay.brevo.com',
     MAIL_PORT=587,
-    MAIL_USE_SSL=True,
-    MAIL_DEFAULT_SENDER=('admin', 'xxxxxx@gmail.com'),
+    MAIL_USE_SSL=False,
+    MAIL_DEFAULT_SENDER=('admin', 'admin@nicewhite.eu.org'),
     MAIL_MAX_EMAILS=10,
     MAIL_USERNAME='yoni980807@gmail.com',
-    MAIL_PASSWORD='xxxxxxxxx'
+    MAIL_PASSWORD='LEZw5HG4JRzQBW9r'
 )
 
 mail = Mail(app)
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient("mongodb://root:efjkajekrdfk@192.168.1.119/")
 db = client["message"]
 
 @app.route("/")
@@ -94,13 +94,19 @@ def logout_handle():
         session.pop("user_info")
         res["err"] = 0
         res["desc"] = "登出成功！"
-    return jsonify(res)
+    return redirect(url_for("login_handle"))
 
 @app.route("/message_board", methods=["GET", "POST"])
 def message_board_handle():
     if request.method == "GET":
-        messages = db.mb_message.find()
-        return render_template("message_board.html", messages=messages)
+        messages = db.mb_message.find([])
+        resp_dict = []
+
+        for document in messages:
+            resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content")))
+        
+        resp_messages = tuple(resp_dict)
+        return render_template("message_board.html", messages=resp_messages)
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
@@ -110,17 +116,81 @@ def message_board_handle():
         if content:
             content = content.strip()
             if 0 < len(content) <= 200:
-                uid = user_info.get("uid")
                 db.mb_message.insert_one({
-                    "uid": uid,
+                    "uname": user_info.get("uname"),
                     "content": content,
-                    "pub_time": datetime.datetime.now()
+                    "pub_time": datetime.datetime.now(),
+                    "ip": request.remote_addr
                 })
                 return redirect(url_for("message_board_handle"))
             else:
                 abort(Response("留言內容長度需在1-200字之間！"))
         else:
             abort(Response("留言內容不能為空！"))
+
+
+
+@app.route("/check_uname")
+def check_uname():
+    uname = request.args.get("uname")
+    if not uname:
+        abort(500)
+
+    res = {"err": 1, "desc": "用户名已被注册！"}
+
+    dbres = db.mb_user.find_one({"uname": uname})
+    if dbres == None:
+        res["err"] = 0
+        res["desc"] = "用户名可用！"
+
+    return jsonify(res)
+
+@app.route("/login", methods=["GET", "POST"])
+def login_handle():
+    if request.method == "GET":
+        return render_template("login.html")
+    elif request.method == "POST":
+        upass = request.form.get("upass")
+        uname = request.form.get("uname")
+
+        if not (upass and uname):
+            abort(500)
+
+        try:
+            dbres = db.mb_user.find_one({
+                "upass": hashlib.md5(upass.encode()).hexdigest(),
+                "uname": uname,
+            })
+            if dbres:
+                session["user_info"] = {
+                    "uid": dbres.get("uid"),
+                    "uname": dbres.get("uname"),
+                    "email": dbres.get("email"),
+                    "reg_time": dbres.get("reg_time"),
+                    "last_login_time": dbres.get("last_login_time"),
+                    "priv": dbres.get("priv"),
+                    "state": dbres.get("state"),
+                    "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                }
+            else:
+                abort(Response("註冊失敗！"))
+        except:
+            abort(Response("註冊失敗！"))
+
+        return redirect('/user_center')
+
+@app.route('/send_email_code', methods=['POST'])
+def send_email_code():
+    email = request.json.get('email')
+    if not email:
+        abort(Response("請輸入信箱！"))
+    code = random.randint(100000, 999999)
+    session['email_code'] = code
+    msg = Message('SGGS ANON 驗證碼', recipients=[email])
+    msg.body = '您的驗證碼是：' + str(code)
+    mail.send(msg)
+    return jsonify({"err": 0, "desc": "驗證碼已發送！"})
+
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True, host='0.0.0.0')
