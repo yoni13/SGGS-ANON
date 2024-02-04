@@ -1,7 +1,14 @@
 ﻿#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import datetime, re, os, random, json, urllib.parse, urllib.request
+from flask_mail import Mail, Message
+import datetime
+import re
+import os
+import random
+import json
+import urllib.parse
+import urllib.request
 from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
 import pymysql
 
@@ -9,8 +16,6 @@ app = Flask(__name__)
 app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
 # app.secret_key = os.urandom(24)  # 在多进程环境下有问题，session获取不了，因为每个进程的secret_key不一样，无法解密cookie
 
-
-from flask_mail import Mail, Message
 
 app.config.update(
     DEBUG=False,
@@ -27,11 +32,14 @@ app.config.update(
 mail = Mail(app)
 
 
-db = pymysql.connect(host="localhost", user="root", password="sggsanon88576", database="message", charset="utf8")
+db = pymysql.connect(host="localhost", user="root",
+                     password="sggsanon88576", database="message", charset="utf8")
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
@@ -51,33 +59,35 @@ def reg_handle():
         #     abort(Response("用户名含有中文汉字！"))
 
         if not re.fullmatch("[a-zA-Z0-9_]{4,20}", uname):
-            abort(Response("用户名不合法！"))
+            abort(Response("帳號名稱請介於4-20個字，且僅接受英文、數字、和底線"))
 
         cur = db.cursor()
         cur.execute("SELECT uid FROM mb_user WHERE uname=%s", (uname,))
         res = cur.rowcount
         cur.close()
         if res != 0:
-            abort(Response("用户名已被注册！"))
+            abort(Response("帳號已被註冊！"))
 
         # 密码长度介于6-15
         if not (len(upass) >= 6 and len(upass) <= 15 and upass == upass2):
-            abort(Response("密码错误！"))
+            abort(Response("密碼錯誤！"))
 
         if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
-            abort(Response("邮箱格式错误！"))
+            abort(Response("信箱格式錯誤！"))
 
         try:
             cur = db.cursor()
-            cur.execute("INSERT INTO mb_user VALUES (default, %s, md5(%s), %s, sysdate(), sysdate(), '1', '1')", (uname, upass, email))
+            cur.execute(
+                "INSERT INTO mb_user VALUES (default, %s, md5(%s), %s, sysdate(), sysdate(), '1', '1')", (uname, upass, email))
             cur.close()
             db.commit()
         except:
-            abort(Response("用户注册失败！"))
+            abort(Response("註冊失敗！"))
 
         session.pop(phone)
         # 注册成功就跳转到登录页面
         return redirect(url_for("login_handle"))
+
 
 @app.route("/user_center")
 def user_center():
@@ -91,27 +101,30 @@ def user_center():
     else:
         return redirect(url_for("login_handle"))
 
+
 @app.route("/logout")
 def logout_handle():
-    res = {"err": 1, "desc": "未登录！"}
+    res = {"err": 1, "desc": "請先登入！"}
     if session.get("user_info"):
         session.pop("user_info")
         res["err"] = 0
-        res["desc"] = "注销成功！"
+        res["desc"] = "註銷成功！"
     return jsonify(res)
+
 
 @app.route("/message_board", methods=["GET", "POST"])
 def message_board_handle():
     if request.method == "GET":
         cur = db.cursor()
-        cur.execute("SELECT uname, pub_time, content, cid FROM mb_user, mb_message WHERE mb_user.uid = mb_message.uid")
+        cur.execute(
+            "SELECT uname, pub_time, content, cid FROM mb_user, mb_message WHERE mb_user.uid = mb_message.uid")
         res = cur.fetchall()
         cur.close()
         return render_template("message_board.html", messages=res)
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
-            abort(Response("未登录！"))
+            abort(Response("請先登入！"))
 
         content = request.form.get("content")
         if content:
@@ -124,14 +137,16 @@ def message_board_handle():
 
                 try:
                     cur = db.cursor()
-                    cur.execute("INSERT INTO mb_message (uid, content, pub_time, from_ip) VALUES (%s, %s, %s, %s)", (uid, content, pub_time, from_ip))
+                    cur.execute("INSERT INTO mb_message (uid, content, pub_time, from_ip) VALUES (%s, %s, %s, %s)", (
+                        uid, content, pub_time, from_ip))
                     cur.close()
                     db.commit()
                     return "留言成功！"
                 except Exception as e:
                     print(e)
 
-        abort(Response("留言失败！"))
+        abort(Response("留言失敗！"))
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login_handle():
@@ -144,17 +159,18 @@ def login_handle():
         print(uname, upass)
 
         if not (uname and uname.strip() and upass and upass.strip()):
-            abort(Response("登录失败！"))
+            abort(Response("登入失敗！"))
 
         if not re.fullmatch("[a-zA-Z0-9_]{4,20}", uname):
-            abort(Response("用户名不合法！"))
+            abort(Response("帳號錯誤！"))
 
         # 密码长度介于6-15
         if not (len(upass) >= 6 and len(upass) <= 15):
-            abort(Response("密码不合法！"))
+            abort(Response("密碼錯誤！"))
 
         cur = db.cursor()
-        cur.execute("SELECT * FROM mb_user WHERE uname=%s AND upass=MD5(%s)", (uname,upass))
+        cur.execute(
+            "SELECT * FROM mb_user WHERE uname=%s AND upass=MD5(%s)", (uname, upass))
         res = cur.fetchone()
         cur.close()
 
@@ -176,19 +192,21 @@ def login_handle():
 
             try:
                 cur = db.cursor()
-                cur.execute("UPDATE mb_user SET last_login_time=%s WHERE uid=%s", (cur_login_time, res[0]))
+                cur.execute(
+                    "UPDATE mb_user SET last_login_time=%s WHERE uid=%s", (cur_login_time, res[0]))
                 cur.close()
                 db.commit()
             except Exception as e:
                 print(e)
 
-            print("登录成功！", session)
+            print("登入成功！", session)
             # return redirect(url_for("user_center"))
             return redirect("/user_center")
         else:
             # 登录失败
-            print("登录失败！")
+            print("登入失敗！")
             return render_template("login.html", login_fail=1)
+
 
 @app.route("/check_uname")
 def check_uname():
@@ -196,17 +214,18 @@ def check_uname():
     if not uname:
         abort(500)
 
-    res = {"err": 1, "desc": "用户名已被注册！"}
+    res = {"err": 1, "desc": "帳號已被註冊！"}
 
     cur = db.cursor()
     cur.execute("SELECT uid FROM mb_user WHERE uname=%s", (uname,))
     if cur.rowcount == 0:
         # 用户名没有被注册
         res["err"] = 0
-        res["desc"] = "用户名没有被注册！"
+        res["desc"] = "帳號尚未被註冊！"
     cur.close()
 
     return jsonify(res)
+
 
 '''
 @app.route("/send_sms_code")
@@ -249,15 +268,18 @@ def send_sms_code(phone):
     except:
         return False
 '''
+
+
 def send_email_verify_code():
-    verify_code = str(random.randint(100000,999999))
-
-    
-
-
-
+    verify_code = str(random.randint(100000, 999999))
+    try:
+        msg = Message("驗證碼", sender="xxxxxx@gmail.com")
+        msg.body = "您的驗證碼:%s" % verify_code
+        mail.send(msg)
+        return verify_code
+    except:
+        return False
 
 
 if __name__ == "__main__":
-    app.run(port=8080, debug=True,host='0.0.0.0')
-
+    app.run(port=8080, debug=True, host='0.0.0.0')
