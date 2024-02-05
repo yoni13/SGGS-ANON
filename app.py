@@ -32,7 +32,7 @@ db = client["message"]
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("testindex.html")
 
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
