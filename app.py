@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import datetime
 import re
 import os
+import string
 import random
 import json
 import urllib.parse
@@ -29,6 +30,12 @@ mail = Mail(app)
 
 client = MongoClient("mongodb://root:efjkajekrdfk@192.168.1.119/")
 db = client["message"]
+
+
+def generate_random_string(length):
+    letters = string.ascii_letters
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 @app.route("/")
 def index():
@@ -121,12 +128,15 @@ def message_board_handle():
             else:
                 ip = request.headers.get('cf-connecting-ip') # cloudflare
             if 0 < len(content) <= 200:
+                post_id = generate_random_string(10)
+                if db.mb_message.find_one({"post_id": post_id}):
+                    post_id = generate_random_string(10)
                 db.mb_message.insert_one({
                     "uname": user_info.get("uname"),
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "ip": ip,
-                    "post_id": user_info.get("uname") + random.randint(100000, 999999) + random.randint(100000, 999999)
+                    "post_id": post_id
                 })
                 return redirect(url_for("message_board_handle"))
             else:
