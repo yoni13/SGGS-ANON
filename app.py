@@ -86,14 +86,6 @@ def reg_handle():
 
         return redirect(url_for("login_handle"))
 
-@app.route("/user_center")
-def user_center():
-    user_info = session.get("user_info")
-
-    if user_info:
-        return render_template("user_center.html", uname=user_info.get("uname"))
-    else:
-        return redirect(url_for("login_handle"))
 
 @app.route("/logout")
 def logout_handle():
@@ -196,21 +188,6 @@ def messages_replys():
         else:
             abort(Response("回覆內容不能為空！"))
 
-@app.route("/check_uname")
-def check_uname():
-    uname = request.args.get("uname")
-    if not uname:
-        abort(400)
-
-    res = {"err": 1, "desc": "用户名已被注册！"}
-
-    dbres = db.mb_user.find_one({"uname": uname})
-    if dbres == None:
-        res["err"] = 0
-        res["desc"] = "用户名可用！"
-
-    return jsonify(res)
-
 @app.route("/login", methods=["GET", "POST"])
 def login_handle():
     if request.method == "GET":
@@ -243,7 +220,7 @@ def login_handle():
         except:
             abort(Response("login失敗！"))
 
-        return redirect('/user_center')
+        return redirect('/message_board')
 
 @app.route('/send_email_code', methods=['POST'])
 def send_email_code():
