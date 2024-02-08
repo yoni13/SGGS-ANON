@@ -69,6 +69,9 @@ def reg_handle():
         if not (uname and uname.strip() and upass and upass2 and verify_code and email):
             abort(500)
 
+        if verify_code != session.get("email_code"):
+            abort(Response("驗證碼錯誤！"))
+
         if re.search(r"[\u4E00-\u9FFF]", uname):
             abort(Response("中文名稱請使用英文名稱！"))
 
