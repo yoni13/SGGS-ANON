@@ -115,7 +115,7 @@ def message_board_handle():
 
         content = request.form.get("content")
         if content:
-            content = escape(content)
+            content = escape(content.strip())
             if request.headers.get('cf-connecting-ip') == None:
                 ip = request.remote_addr
             else:
@@ -125,7 +125,8 @@ def message_board_handle():
                     "uname": user_info.get("uname"),
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "ip": ip
+                    "ip": ip,
+                    "post_id": user_info.get("uname") + random.randint(100000, 999999) + random.randint(100000, 999999)
                 })
                 return redirect(url_for("message_board_handle"))
             else:
