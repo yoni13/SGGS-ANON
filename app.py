@@ -124,7 +124,7 @@ def message_board_handle():
                 db.mb_message.insert_one({
                     "uname": user_info.get("uname"),
                     "content": content,
-                    "pub_time": datetime.datetime.now(),
+                    "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "ip": ip
                 })
                 return redirect(url_for("message_board_handle"))
