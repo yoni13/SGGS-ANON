@@ -7,3 +7,4 @@ MarkupSafe
 pymongo
 Werkzeug
 flask-mail
+Flask-Limiter
