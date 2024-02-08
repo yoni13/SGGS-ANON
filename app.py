@@ -11,9 +11,21 @@ import urllib.parse
 import urllib.request
 import hashlib
 from markupsafe import escape
+from flask_limiter import Limiter
 
 app = Flask(__name__)
 app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
+
+def get_remote_address():
+    return request.headers.get('cf-connecting-ip') if request.headers.get('cf-connecting-ip') else request.remote_addr
+
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[],
+    storage_uri="memory://",
+)
 
 app.config.update(
     DEBUG=False,
@@ -39,11 +51,13 @@ def generate_random_string(length):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect(url_for("message_board_handle"))
 
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
     if request.method == "GET":
+        if session.get("user_info"):
+            return redirect(url_for("message_board_handle"))
         return render_template("reg.html")
     elif request.method == "POST":
         uname = request.form.get("uname")
@@ -63,7 +77,10 @@ def reg_handle():
 
         cur = db.mb_user.find_one({"uname": uname})
         if cur:
-            abort(Response("帳號已被註冊！"))
+            abort(Response("名子已被註冊！"))
+        findemail = db.mb_user.find_one({"email": email})
+        if findemail:
+            abort(Response("信箱已被註冊！"))
 
         if not (len(upass) >= 6 and len(upass) <= 15 and upass == upass2):
             abort(Response("密碼錯誤！"))
@@ -84,7 +101,7 @@ def reg_handle():
         except:
             abort(Response("註冊失敗！"))
 
-        return redirect(url_for("login_handle"))
+        return redirect('/login?reg=1')
 
 
 @app.route("/logout")
@@ -191,7 +208,9 @@ def messages_replys():
 @app.route("/login", methods=["GET", "POST"])
 def login_handle():
     if request.method == "GET":
-        return render_template("login.html")
+        if session.get("user_info"):
+            return redirect('/message_board')
+        return Response(render_template("login.html") + "<script>if (location.search == '?reg=1') {alert('註冊成功！')}</script>")
     elif request.method == "POST":
         upass = request.form.get("upass")
         uname = request.form.get("uname")
@@ -223,10 +242,18 @@ def login_handle():
         return redirect('/message_board')
 
 @app.route('/send_email_code', methods=['POST'])
+@limiter.limit("1/second")
 def send_email_code():
     email = request.json.get('email')
     if not email:
-        abort(Response("請輸入信箱！"))
+        return jsonify({"err": 1, "desc": "請輸入信箱！"})
+    
+    if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
+        return jsonify({"err": 1, "desc": "信箱格式錯誤！"})
+    
+    if db.mb_user.find_one({"email": email}):
+        return jsonify({"err": 1, "desc": "信箱已被註冊！"})
+    
     code = random.randint(100000, 999999)
     session['email_code'] = code
     msg = Message('SGGS ANON 驗證碼', recipients=[email])

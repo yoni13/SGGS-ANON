@@ -17,6 +17,7 @@ send_email_code.onclick = function() {
             alert('驗證碼已發送到您的郵箱，請查收');
         } else {
             alert('發送失敗');
+            alert(data['desc']);
         }
     });
 }

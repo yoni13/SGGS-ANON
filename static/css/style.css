@@ -153,3 +153,42 @@ hr{
 .message:hover{
     border: #FFFFFF 2px solid;
 }
+
+#reg_form{
+    margin-top: 40px;
+    margin-left: 20px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #404040;
+    border: 2px solid #404040;
+    border-radius: 57px;
+}
+
+#reg_form input{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 57px;
+    border: 2px solid #ffffff;
+    background-color: #404040;
+    color: #afafaf;
+}
+
+#reg_form button{
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 57px;
+    border: 2px solid #ffffff;
+    background-color: #404040;
+    color: #afafaf;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+
+}
+
+#reg_form button:hover{
+    background-color: #afafaf;
+    color: #404040;
+}
