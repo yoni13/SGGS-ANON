@@ -111,7 +111,7 @@ def message_board_handle():
         resp_dict = []
 
         for document in messages:
-            resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content")))
+            resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content"), document.get("post_id")))
         
         resp_messages = tuple(resp_dict)
         return render_template("message_board.html", messages=resp_messages)
@@ -145,6 +145,56 @@ def message_board_handle():
             abort(Response("留言內容不能為空！"))
 
 
+@app.route('/messages_replys', methods=['GET', 'POST'])
+def messages_replys():
+    if request.method == "GET":
+        post_id = request.args.get("post_id")
+        if not post_id:
+            abort(400)
+        messages = db.mb_message.find({"post_id": post_id})
+        resp_dict = []
+
+        for document in messages:
+            resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content")))
+        if resp_dict == []:
+            abort(400)
+
+        resp_messages = tuple(resp_dict)
+        
+        replys = db.mb_replys.find({"post_id": post_id})
+        replys_dict = []
+
+        for document in replys:
+            replys_dict.append((document.get("uname"), document.get("pub_time"), document.get("content")))
+        resp_replys = tuple(replys_dict)
+
+        return render_template("replys.html", messages=resp_messages,replys=resp_replys)
+    elif request.method == "POST":
+        user_info = session.get("user_info")
+        if not user_info:
+            abort(Response("請先登入！"))
+
+        content = request.form.get("content")
+        post_id = request.args.get("post_id")
+        if content and post_id:
+            content = escape(content.strip())
+            if request.headers.get('cf-connecting-ip') == None:
+                ip = request.remote_addr
+            else:
+                ip = request.headers.get('cf-connecting-ip') # cloudflare
+            if 0 < len(content) <= 200:
+                db.mb_replys.insert_one({
+                    "uname": user_info.get("uname"),
+                    "content": content,
+                    "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "ip": ip,
+                    "post_id": post_id
+                })
+                return redirect(url_for("messages_replys", post_id=post_id))
+            else:
+                abort(Response("回覆內容長度需在1-200字之間！"))
+        else:
+            abort(Response("回覆內容不能為空！"))
 
 @app.route("/check_uname")
 def check_uname():
