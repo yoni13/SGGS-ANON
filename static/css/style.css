@@ -39,7 +39,6 @@ body{
 }
 
 #wanttologin {
-    max-width: 70%;
     margin-top: 40px;
     margin-left: 20px;
     padding: 10px;
@@ -98,7 +97,6 @@ hr{
 }
 
 .message{
-    max-width: 70%;
     margin-top: 40px;
     margin-left: 20px;
     padding: 10px;
@@ -145,4 +143,13 @@ hr{
     color: #ffffff;
     font-size: 20px;
     padding-left: 20px;
+}
+
+.message a{
+    text-decoration: none;
+    
+}
+
+.message:hover{
+    border: #FFFFFF 2px solid;
 }
