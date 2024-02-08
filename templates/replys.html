@@ -30,7 +30,7 @@
         </div>
         {% endfor %}
 
-
+{% if session.get("user_info") %}
 <div id="mb_form">
     <form method="POST">
         <table>
@@ -38,7 +38,7 @@
             <tr><td></td><td><button type="submit">送出</button></td></tr>
         </table>
     </form>
-</div>{% if session.get("user_info") %}
+</div>
 {% else %}
 
 <p id="wanttologin">想回覆?<a href="/login">登入</a>！</p>
