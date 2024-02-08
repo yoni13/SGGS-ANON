@@ -135,7 +135,7 @@ def message_board_handle():
 def check_uname():
     uname = request.args.get("uname")
     if not uname:
-        abort(500)
+        abort(400)
 
     res = {"err": 1, "desc": "用户名已被注册！"}
 
@@ -155,7 +155,7 @@ def login_handle():
         uname = request.form.get("uname")
 
         if not (upass and uname):
-            abort(500)
+            abort(400)
 
         try:
             dbres = db.mb_user.find_one({
