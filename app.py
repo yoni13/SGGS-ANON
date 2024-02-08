@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import datetime
 import re
 import os
+import string
 import random
 import json
 import urllib.parse
@@ -29,6 +30,12 @@ mail = Mail(app)
 
 client = MongoClient("mongodb://root:efjkajekrdfk@192.168.1.119/")
 db = client["message"]
+
+
+def generate_random_string(length):
+    letters = string.ascii_letters
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 @app.route("/")
 def index():
@@ -116,12 +123,20 @@ def message_board_handle():
         content = request.form.get("content")
         if content:
             content = escape(content.strip())
+            if request.headers.get('cf-connecting-ip') == None:
+                ip = request.remote_addr
+            else:
+                ip = request.headers.get('cf-connecting-ip') # cloudflare
             if 0 < len(content) <= 200:
+                post_id = generate_random_string(10)
+                if db.mb_message.find_one({"post_id": post_id}):
+                    post_id = generate_random_string(10)
                 db.mb_message.insert_one({
                     "uname": user_info.get("uname"),
                     "content": content,
-                    "pub_time": datetime.datetime.now(),
-                    "ip": request.remote_addr
+                    "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "ip": ip,
+                    "post_id": post_id
                 })
                 return redirect(url_for("message_board_handle"))
             else:
@@ -171,12 +186,12 @@ def login_handle():
                     "last_login_time": dbres.get("last_login_time"),
                     "priv": dbres.get("priv"),
                     "state": dbres.get("state"),
-                    "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                 }
             else:
-                abort(Response("註冊失敗！"))
+                abort(Response("login失敗！"))
         except:
-            abort(Response("註冊失敗！"))
+            abort(Response("login失敗！"))
 
         return redirect('/user_center')
 

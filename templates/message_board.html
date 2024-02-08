@@ -1,43 +1,18 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>歡迎使用留言板!</title>
+<head>
+    <title>留言板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./static/css/style.css" />
+</head>
+<body>
+<div class="navbar">
+  <a href="/"><img src="./static/img/logo.png" alt="SGGS logo" >
+  <h1 >Anonymous</h1></a>
+</div>
 
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-            }
-
-            .message {
-                margin-top: 10px;
-                padding: 10px;
-                border-bottom: 1px dotted black;
-            }
-
-            .message:last-child {
-                border-bottom: none;
-            }
-
-            .uname {
-                color: red;
-            }
-
-            .pub_time {
-                margin-left: 50px;
-                color: blue;
-            }
-
-            .content {
-                margin-top: 10px;
-            }
-
-        </style>
-    </head>
-    <body>
-        {% if session.get("user_info") %}
+{% if session.get("user_info") %}
         <div id="mb_form">
             <form action="/message_board" method="POST">
                 <table>
@@ -47,14 +22,18 @@
             </form>
         </div>
         {% else %}
-        <p>想留言?<a href="/login">登入</a>！</p>
+        <p id="wanttologin">想留言?<a href="/login">登入</a>！</p>
         {% endif %}
         <hr>
         {% for m in messages %}
         <div class="message">
-            <div><span class="uname">{{ m[0] }}</span><span class="pub_time">{{ m[1] }}</span></div>
+            <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
+            <br><br>
+            <span class="pub_time">{{ m[1] }}</span></div>
             <p class="content">{{ m[2] }}</p>
         </div>
         {% endfor %}
-    </body>
+
+
+</body>
 </html>
