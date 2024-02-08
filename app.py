@@ -32,7 +32,7 @@ db = client["message"]
 
 @app.route("/")
 def index():
-    return render_template("testindex.html")
+    return render_template("index.html")
 
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
@@ -115,13 +115,17 @@ def message_board_handle():
 
         content = request.form.get("content")
         if content:
-            content = escape(content.strip())
+            content = escape(content)
+            if request.headers.get('cf-connecting-ip') == None:
+                ip = request.remote_addr
+            else:
+                ip = request.headers.get('cf-connecting-ip') # cloudflare
             if 0 < len(content) <= 200:
                 db.mb_message.insert_one({
                     "uname": user_info.get("uname"),
                     "content": content,
                     "pub_time": datetime.datetime.now(),
-                    "ip": request.remote_addr
+                    "ip": ip
                 })
                 return redirect(url_for("message_board_handle"))
             else:
@@ -171,12 +175,12 @@ def login_handle():
                     "last_login_time": dbres.get("last_login_time"),
                     "priv": dbres.get("priv"),
                     "state": dbres.get("state"),
-                    "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                 }
             else:
-                abort(Response("註冊失敗！"))
+                abort(Response("login失敗！"))
         except:
-            abort(Response("註冊失敗！"))
+            abort(Response("login失敗！"))
 
         return redirect('/user_center')
 

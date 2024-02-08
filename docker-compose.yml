@@ -9,3 +9,4 @@ services:
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=development
+      - TZ=Asia/Taipei

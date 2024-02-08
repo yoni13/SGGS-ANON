@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Orienta&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+
 *{
     position: relative;
 }
@@ -17,11 +21,128 @@ body{
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
-    left: 20px;
-    top : 20px;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .navbar h1{
-    white-space: nowrap;
     display: inline;
+    margin-top: 10px;
+    bottom: 15px;
+    font-family: 'Orienta', sans-serif;
+    color: #FFFFFF;
+    font-size: 30px;
+}
+
+.navbar a{
+    text-decoration: none;
+}
+
+#wanttologin {
+    max-width: 70%;
+    margin-top: 40px;
+    margin-left: 20px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #404040;
+    border: 2px solid #404040;
+    border-radius: 57px;
+}
+
+#wanttologin a{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+#mb_form{
+    margin-right: 20px;
+    max-width: 100%;
+    margin-top: 40px;
+    margin-left: 20px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #404040;
+    border: 2px solid #404040;
+    border-radius: 57px;
+}
+
+#mb_form textarea{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 57px;
+    border: 2px solid #ffffff;
+    background-color: #404040;
+    color: #afafaf;
+}
+
+#mb_form button{
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 57px;
+    border: 2px solid #ffffff;
+    background-color: #404040;
+    color: #afafaf;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+
+}
+
+hr{
+    border: 1px solid #afafaf;
+    margin: 20px 20px;
+}
+
+.message{
+    max-width: 70%;
+    margin-top: 40px;
+    margin-left: 20px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #404040;
+    border: 2px solid #404040;
+    border-radius: 57px;
+}
+
+.message .profileimg{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.message .uname{
+    display: inline;
+    margin-top: 10px;
+    bottom: 15px;
+    font-family: 'Orienta', sans-serif;
+    color: #FFFFFF;
+    font-size: 30px;
+}
+
+.message .pub_time{
+    display: inline;
+    margin-top: 10px;
+    bottom: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #afafaf;
+    font-size: 20px;
+    padding-left: 20px;
+}
+
+.message .content{
+    margin-top: 10px;
+    bottom: 12px;
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+    font-size: 20px;
+    padding-left: 20px;
 }
