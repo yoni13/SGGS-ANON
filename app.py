@@ -125,7 +125,7 @@ def message_board_handle():
         for document in messages:
             resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content"), document.get("post_id")))
 
-        resp_messages = tuple(resp_dict)
+        resp_messages = tuple(reversed(resp_dict))
         return render_template("message_board.html", messages=resp_messages)
     elif request.method == "POST":
         user_info = session.get("user_info")
