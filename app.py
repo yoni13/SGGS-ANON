@@ -1,4 +1,4 @@
-﻿from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
+from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
 from flask_mail import Mail, Message
 from pymongo import MongoClient
 import datetime
@@ -124,7 +124,7 @@ def message_board_handle():
 
         for document in messages:
             resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content"), document.get("post_id")))
-        
+
         resp_messages = tuple(resp_dict)
         return render_template("message_board.html", messages=resp_messages)
     elif request.method == "POST":
@@ -172,7 +172,7 @@ def messages_replys():
             abort(400)
 
         resp_messages = tuple(resp_dict)
-        
+
         replys = db.mb_replys.find({"post_id": post_id})
         replys_dict = []
 
@@ -250,13 +250,13 @@ def send_email_code():
     email = request.json.get('email')
     if not email:
         return jsonify({"err": 1, "desc": "請輸入信箱！"})
-    
+
     if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
         return jsonify({"err": 1, "desc": "信箱格式錯誤！"})
-    
+
     if db.mb_user.find_one({"email": email}):
         return jsonify({"err": 1, "desc": "信箱已被註冊！"})
-    
+
     code = random.randint(100000, 999999)
     session['email_code'] = code
     msg = Message('SGGS ANON 驗證碼', recipients=[email])
