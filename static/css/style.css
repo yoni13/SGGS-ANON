@@ -39,7 +39,7 @@ body{
 }
 
 #wanttologin {
-    margin-right: 10px;
+    margin-right: 20px;
     margin-top: 40px;
     margin-left: 20px;
     padding: 10px;
@@ -100,7 +100,7 @@ hr{
 .message{
     margin-top: 40px;
     margin-left: 20px;
-    margin-right: 10px;
+    margin-right: 20px;
     padding: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
