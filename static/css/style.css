@@ -2,12 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 
-*{
+* {
     position: relative;
 }
-body{
+
+body {
     background-color: #525252;
-} 
+}
+
+a {
+    -webkit-tap-highlight-color:transparent;
+}
+
 .navbar {
     top : 20px;
     border-radius: 23px;
