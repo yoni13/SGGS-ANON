@@ -67,10 +67,14 @@ def reg_handle():
         email = request.form.get("email")
 
         if not (uname and uname.strip() and upass and upass2 and verify_code and email):
-            abort(500)
-
-        if verify_code != session.get("email_code"):
-            abort(Response("驗證碼錯誤！"))
+            abort(400)
+        print(email)
+        print(verify_code)
+        if db.reg_code.find_one({"email":email,"reg_code":verify_code}):
+            pass
+        else:
+            print(db.reg_code.find_one({"email":email}))
+            abort(Response("驗證碼錯誤!"))
 
         if re.search(r"[\u4E00-\u9FFF]", uname):
             abort(Response("中文名稱請使用英文名稱！"))
@@ -101,6 +105,8 @@ def reg_handle():
                 "priv": '1',
                 "state": '1'
             })
+            db.reg_code.delete_one({"email":email,
+                "reg_code":verify_code})
         except:
             abort(Response("註冊失敗！"))
 
@@ -258,7 +264,10 @@ def send_email_code():
         return jsonify({"err": 1, "desc": "信箱已被註冊！"})
 
     code = random.randint(100000, 999999)
-    session['email_code'] = code
+    db.reg_code.insert_one({
+    "email":email,
+    "reg_code":str(code)
+    })
     msg = Message('SGGS ANON 驗證碼', recipients=[email])
     msg.body = '您的驗證碼是：' + str(code)
     mail.send(msg)
