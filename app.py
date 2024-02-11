@@ -124,6 +124,37 @@ def logout_handle():
         res["desc"] = "登出成功！"
     return redirect(url_for("login_handle"))
 
+
+@app.route("/post_anonymous", methods=["GET", "POST"])
+def post_anonymous_handle():
+    if request.method == "GET":
+        return render_template("post_anonymous.html")
+    elif request.method == "POST":
+        user_info = session.get("user_info")
+        if not user_info:
+            real_uname = None
+        else:
+            real_uname = user_info.get("uname")
+        content = request.form.get("content")
+
+        if content:
+            content = escape(content.strip())
+            if request.headers.get('cf-connecting-ip') == None:
+                ip = request.remote_addr
+            else:
+                ip = request.headers.get('cf-connecting-ip')
+            if 0 < len(content) <= 200:
+                db.mb_message.insert_one({
+                    "uname": "匿名",
+                    "content": content,
+                    "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "ip": ip,
+                    "post_id": generate_random_string(10) + 'anonymous',
+                    "real_uname": real_uname
+                })
+                return redirect(url_for("message_board_handle"))
+
+
 @app.route("/message_board", methods=["GET", "POST"])
 def message_board_handle():
     if request.method == "GET":
@@ -202,9 +233,15 @@ def messages_replys():
                 ip = request.remote_addr
             else:
                 ip = request.headers.get('cf-connecting-ip') # cloudflare
+
+            if user_info.get("uname") == db.mb_message.find_one({"post_id": post_id}).get("real_uname"):
+                uname = "匿名"
+            else:
+                uname = user_info.get("uname")
+
             if 0 < len(content) <= 200:
                 db.mb_replys.insert_one({
-                    "uname": user_info.get("uname"),
+                    "uname": uname,
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "ip": ip,

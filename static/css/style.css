@@ -86,7 +86,7 @@ a {
     color: #afafaf;
 }
 
-#mb_form button{
+#mb_form button {
     padding: 10px;
     margin: 10px 0;
     border-radius: 57px;
@@ -97,6 +97,29 @@ a {
     font-size: 20px;
 
 }
+
+#mb_form button:hover{
+    background-color: #afafaf;
+    color: #404040;
+}
+
+#mb_form a {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 57px;
+    border: 2px solid #ffffff;
+    background-color: #404040;
+    color: #afafaf;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+#mb_form a:hover{
+    background-color: #afafaf;
+    color: #404040;
+}
+
 
 hr{
     border: 1px solid #afafaf;
@@ -200,4 +223,27 @@ hr{
 #reg_form button:hover{
     background-color: #afafaf;
     color: #404040;
+}
+
+#reg_form a{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+#post_anonymous_warning{
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #404040;
+    border: 2px solid #404040;
+    border-radius: 57px;
+}
+
+#post_anonymous_warning a{
+    text-decoration: none;
+    color: #ffffff;
 }
