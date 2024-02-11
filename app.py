@@ -282,6 +282,7 @@ def login_handle():
                     "state": dbres.get("state"),
                     "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                 }
+                db.mb_user.update_one({"uname": uname}, {"$set": {"last_login_time": datetime.datetime.now()}})
             else:
                 abort(Response("login失敗！"))
         except:
