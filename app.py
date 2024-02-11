@@ -264,6 +264,8 @@ def send_email_code():
         return jsonify({"err": 1, "desc": "信箱已被註冊！"})
 
     code = random.randint(100000, 999999)
+    if db.reg_code.find_one({"email":email}):
+        db.reg_code.delete_one({"email":email})
     db.reg_code.insert_one({
     "email":email,
     "reg_code":str(code)
