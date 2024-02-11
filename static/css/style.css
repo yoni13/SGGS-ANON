@@ -48,10 +48,10 @@ a {
     margin-right: 20px;
     margin-top: 40px;
     margin-left: 20px;
-    padding: 10px;
+    padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -174,10 +174,10 @@ hr{
     color: #ffffff;
     font-size: 20px;
     padding-left: 20px;
+    word-wrap: break-word;
 }
 
 .message .reply{
-    margin-top: 10px;
     bottom: 12px;
     font-family: 'Inter', sans-serif;
     color: #afafaf;
