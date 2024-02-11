@@ -153,7 +153,8 @@ def post_anonymous_handle():
                     "real_uname": real_uname
                 })
                 return redirect(url_for("message_board_handle"))
-
+        else:
+            abort(Response('留言不能為空'))
 
 @app.route("/message_board", methods=["GET", "POST"])
 def message_board_handle():
