@@ -317,5 +317,13 @@ def send_email_code():
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
 
 
+@app.route('/privacy_policy')
+def tos():
+    return render_template('privacy.html')
+
+@app.route('/favicon.ico')
+def favicon():
+    return redirect('/static/img/logo.png')
+
 if __name__ == "__main__":
     app.run(port=8080, debug=True, host='0.0.0.0')
