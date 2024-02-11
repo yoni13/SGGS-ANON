@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
+﻿from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
 from flask_mail import Mail, Message
 from pymongo import MongoClient
 import datetime
@@ -7,7 +7,7 @@ import os
 import string
 import random
 import json
-import urllib.parse
+import time
 import urllib.request
 import hashlib
 from markupsafe import escape
@@ -70,11 +70,13 @@ def reg_handle():
             abort(400)
         print(email)
         print(verify_code)
-        if db.reg_code.find_one({"email":email,"reg_code":verify_code}):
-            pass
-        else:
-            print(db.reg_code.find_one({"email":email}))
+        if not db.reg_code.find_one({"email":email,"reg_code":verify_code}):
             abort(Response("驗證碼錯誤!"))
+
+        # Verify time
+        if time.time() - db.reg_code.find_one({"email":email,"reg_code":verify_code})["send_time"] > 300: # 5 minutes
+            db.reg_code.delete_one({"email":email,"reg_code":verify_code})
+            abort(Response("驗證碼已過期!"))
 
         if re.search(r"[\u4E00-\u9FFF]", uname):
             abort(Response("中文名稱請使用英文名稱！"))
@@ -268,10 +270,11 @@ def send_email_code():
         db.reg_code.delete_one({"email":email})
     db.reg_code.insert_one({
     "email":email,
-    "reg_code":str(code)
+    "reg_code":str(code),
+    "send_time":time.time()
     })
     msg = Message('SGGS ANON 驗證碼', recipients=[email])
-    msg.body = '您的驗證碼是：' + str(code)
+    msg.body = '您的驗證碼是：' + str(code) +'，有效期為5分鐘。'
     mail.send(msg)
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
 
