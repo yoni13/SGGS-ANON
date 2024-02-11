@@ -176,6 +176,15 @@ hr{
     padding-left: 20px;
 }
 
+.message .reply{
+    margin-top: 10px;
+    bottom: 12px;
+    font-family: 'Inter', sans-serif;
+    color: #afafaf;
+    font-size: 20px;
+    padding-left: 20px;
+}
+
 .message a{
     text-decoration: none;
     
