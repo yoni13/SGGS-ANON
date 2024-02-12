@@ -1,0 +1,10 @@
+stages:
+  - call
+
+call:
+  stage: call
+  script:
+    - apt-get update
+    - apt-get install curl -y --no-install-recommends
+    - curl --silent "http://192.168.1.119:10000/webhook"
+
