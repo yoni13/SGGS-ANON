@@ -1,4 +1,4 @@
-﻿from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
+from flask import Flask, render_template, request, jsonify, session, abort, redirect, url_for, Response
 from flask_mail import Mail, Message
 from pymongo import MongoClient
 import datetime
@@ -163,8 +163,14 @@ def message_board_handle():
         resp_dict = []
 
         for document in messages:
-            resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content"), document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")})))
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")})))
         resp_messages = tuple(reversed(resp_dict))
+
         return render_template("message_board.html", messages=resp_messages)
     elif request.method == "POST":
         user_info = session.get("user_info")
@@ -206,7 +212,11 @@ def messages_replys():
         resp_dict = []
 
         for document in messages:
-            resp_dict.append((document.get("uname"), document.get("pub_time"), document.get("content")))
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content))
         if resp_dict == []:
             abort(400)
 
@@ -216,7 +226,13 @@ def messages_replys():
         replys_dict = []
 
         for document in replys:
-            replys_dict.append((document.get("uname"), document.get("pub_time"), document.get("content")))
+
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content))
         resp_replys = tuple(replys_dict)
 
         return render_template("replys.html", messages=resp_messages,replys=resp_replys)
