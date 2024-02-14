@@ -15,6 +15,9 @@ from flask_limiter import Limiter
 
 app = Flask(__name__)
 app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
+from sggsanon import api
+app.register_blueprint(api.api)
+
 
 def get_remote_address():
     return request.headers.get('cf-connecting-ip') if request.headers.get('cf-connecting-ip') else request.remote_addr
