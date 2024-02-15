@@ -1,4 +1,4 @@
-# API introduction and usage of the sggs-ano API v1
+# API introduction and usage of the sggs-anon API v1
 
 ## Introduction
 We use https to access the API. The base URL is `/api/v1/`.
