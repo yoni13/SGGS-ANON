@@ -43,7 +43,7 @@ app.config.update(
 
 mail = Mail(app)
 
-client = MongoClient("mongodb://root:efjkajekrdfk@192.168.1.119/")
+client = MongoClient("mongodb://root:efjkajekrdfk@192.168.0.178/")
 db = client["message"]
 
 
