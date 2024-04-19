@@ -1,12 +1,22 @@
-version: '3'
 services:
   web:
-    build: .
+    image: 192.168.0.191:8443/yoni13/messageboard:latest
     ports:
-      - 5000:5000
-    volumes:
-      - .:/app
+      - "5000:5000"
+    restart: always
     environment:
-      - FLASK_APP=app.py
-      - FLASK_ENV=development
+      - DATABASE_URL=mongodb://root:efjkajekrdfk@db/
       - TZ=Asia/Taipei
+    depends_on:
+      - db
+    links:
+      - db
+  db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: efjkajekrdfk
+      TZ: Asia/Taipei
+    volumes:
+      - './data:/data/db'
