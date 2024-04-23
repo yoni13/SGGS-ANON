@@ -31,7 +31,7 @@ def mb_board():
     datas = db.mb_message.find().limit(limit).skip((page-1)*limit)
     res = []
     for data in datas:
-        replys_count = db.mb_replys.find({"post_id": data['post_id']}).count()
+        replys_count = db.mb_replys.count_documents({"post_id": data['post_id']})
             
         info = {'uname': data['uname'], 'content': data['content'], 'pub_time': data['pub_time'], 'post_id': data['post_id'], 'replys_count': replys_count}
         res.append(info)
