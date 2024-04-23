@@ -11,6 +11,40 @@ def index():
 
 @api.route('/api/v1/mb_board/')
 def mb_board():
+    return jsonify([
+    {
+        "content": "Wellcome !",
+        "post_id": "XRiFSDbRYC",
+        "pub_time": "2024-02-08 20:39",
+        "uname": "Cartman"
+    },
+    {
+        "content": "Hellllllo \n testing",
+        "post_id": "EXwxCXmvFx",
+        "pub_time": "2024-02-08 20:58",
+        "uname": "Cartman"
+    },
+    {
+        "content": "這裡好酷，匿名自由~~",
+        "post_id": "CmRijQSBhf",
+        "pub_time": "2024-02-08 21:25",
+        "uname": "Whale120"
+    },
+    {
+        "content": "註冊的問題解決摟~可以註冊了！",
+        "post_id": "EWJqhlejGQ",
+        "pub_time": "2024-02-10 22:30",
+        "uname": "Cartman"
+    },
+    {
+        "content": "匿名寫好了",
+        "post_id": "nPSuUUZrOIanonymous",
+        "pub_time": "2024-02-11 21:52",
+        "uname": "匿名"
+    }
+]
+)
+'''
     if request.args.get('limit'):
         if not request.args.get('limit').isdigit():
             return abort(400, 'limit must be a number')
@@ -36,7 +70,7 @@ def mb_board():
         res = list(reversed(res))
     
     return jsonify(res)
-
+'''
 @api.route('/api/v1/mb_replys/')
 def mb_board_post():
     post_id = request.args.get('post_id')
