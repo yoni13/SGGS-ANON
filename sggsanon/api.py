@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, abort, request, jsonify
 from pymongo import MongoClient
-client = MongoClient("mongodb://root:efjkajekrdfk@192.168.1.119/")
+import os
+client = MongoClient(os.environ['DATABASE_URL'])
 db = client["message"]
 
 api = Blueprint('api', __name__, template_folder='templates')
@@ -11,7 +12,7 @@ def index():
 
 @api.route('/api/v1/mb_board/')
 def mb_board():
-    
+
     if request.args.get('limit'):
         if not request.args.get('limit').isdigit():
             return abort(400, 'limit must be a number')
