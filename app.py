@@ -177,7 +177,7 @@ def message_board_handle():
                 content = document.get("content")
 
             resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")})))
-        resp_messages = tuple(resp_dict)
+        resp_messages = tuple(reversed(resp_dict))
 
         return render_template("message_board.html", messages=resp_messages)
     elif request.method == "POST":
