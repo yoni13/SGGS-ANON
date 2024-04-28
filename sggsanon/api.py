@@ -32,13 +32,15 @@ def mb_board():
     res = []
     for data in datas:
         replys_count = db.mb_replys.count_documents({"post_id": data['post_id']})
-            
+
         info = {'uname': data['uname'], 'content': data['content'], 'pub_time': data['pub_time'], 'post_id': data['post_id'], 'replys_count': replys_count}
         res.append(info)
-    
+
     if request.args.get('reverse') == '1':
-        res = list(reversed(res))
-    
+        res = list(res)
+    else:
+        res = list(revsesed(res))
+
     return jsonify(res)
 
 @api.route('/api/v1/mb_replys/')
