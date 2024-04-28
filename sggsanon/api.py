@@ -39,7 +39,7 @@ def mb_board():
     if request.args.get('reverse') == '1':
         res = list(res)
     else:
-        res = list(revsesed(res))
+        res = list(reversed(res))
 
     return jsonify(res)
 
