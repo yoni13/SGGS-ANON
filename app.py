@@ -20,8 +20,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 
-from sggsanon import api
-app.register_blueprint(api.api)
+
 
 
 def get_remote_address():
@@ -46,6 +45,12 @@ app.config.update(
     MAIL_PASSWORD='LEZw5HG4JRzQBW9r'
 )
 
+def get_mail():
+    return Mail
+
+from sggsanon import api
+app.register_blueprint(api.api)
+
 mail = Mail(app)
 
 client = MongoClient(os.environ['DATABASE_URL'])
@@ -59,7 +64,7 @@ def generate_random_string(length):
 
 @app.route("/")
 def index():
-    return redirect(url_for("message_board_handle"))
+    return redirect('/message_board')
 
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
@@ -130,7 +135,7 @@ def logout_handle():
         session.pop("user_info")
         res["err"] = 0
         res["desc"] = "登出成功！"
-    return redirect(url_for("login_handle"))
+    return redirect('/login')
 
 
 @app.route("/post_anonymous", methods=["GET", "POST"])
@@ -160,7 +165,7 @@ def post_anonymous_handle():
                     "post_id": generate_random_string(10) + 'anonymous',
                     "real_uname": real_uname
                 })
-                return redirect(url_for("message_board_handle"))
+                return redirect('/message_board')
         else:
             abort(Response('留言不能為空'))
 

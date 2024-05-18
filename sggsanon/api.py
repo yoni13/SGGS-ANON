@@ -1,29 +1,16 @@
-from flask import Blueprint, render_template, abort, request, jsonify, Response
+from flask import Blueprint, render_template, abort, request, jsonify, Response, current_app
 from pymongo import MongoClient
 import time
 import random, string
 from flask_mail import Mail, Message
 import os
+from app import get_mail
+
+mail = get_mail()
 client = MongoClient(os.environ['DATABASE_URL'])
 db = client["message"]
 
-api = Blueprint('api', __name__, template_folder='templates')
-
-
-
-api.config.update(
-    DEBUG=False,
-    MAIL_SERVER='smtp-relay.brevo.com',
-    MAIL_PORT=587,
-    MAIL_USE_SSL=False,
-    MAIL_DEFAULT_SENDER=('admin', 'admin@nicewhite.eu.org'),
-    MAIL_MAX_EMAILS=10,
-    MAIL_USERNAME='yoni980807@gmail.com',
-    MAIL_PASSWORD='LEZw5HG4JRzQBW9r'
-)
-
-mail = Mail(api)
-
+api = Blueprint('api', __name__)
 
 
 @api.route('/api/v1/')
