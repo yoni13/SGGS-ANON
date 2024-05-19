@@ -30,12 +30,12 @@ def mb_board():
     if request.args.get('page'):
         if not request.args.get('page').isdigit():
             return abort(400, 'page must be a number')
-        page = request.args.get('page')
+        page = int(request.args.get('page'))
     else:
         page = 1
 
 
-    datas = db.mb_message.find().limit(limit).skip((page-1)*limit)
+    datas = db.mb_message.find().sort({'_id':-1}).limit(limit).skip((page-1)*limit)
     res = []
     for data in datas:
         replys_count = db.mb_replys.count_documents({"post_id": data['post_id']})
@@ -47,7 +47,7 @@ def mb_board():
         res = list(res)
     else:
         res = list(reversed(res))
-
+        
     return jsonify(res)
 
 @api.route('/api/v1/mb_replys/')
@@ -88,85 +88,3 @@ def mb_board_post():
     else:
         return abort(400)
     
-
-@api.route('/api/v1/login/', methods=['POST'])
-def login():
-    if not request.json:
-        return jsonify({"error": "request must be json"}), 400
-    if not request.json.get('uname') or not request.json.get('password'):
-        return jsonify({"error": "uname and password are required"}), 400
-    uname = request.json.get('uname')
-    password = request.json.get('password')
-    data = db.users.find_one({'uname': uname, 'password': password})
-    if data:
-        sessions = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(10)) + uname
-        db.session.insert_one({'uname': uname, 'login_time': time.time(),'session':sessions})
-        return jsonify({"success": "login success",'session':sessions}), 200
-    else:
-        return jsonify({"error": "login failed"}), 400
-    
-@api.route('/api/v1/register/', methods=['POST'])
-def register():
-
-    uname = request.json.get('uname')
-    password = request.json.get('password')
-    email = request.json.get('email')
-    verify_code = request.json.get('email_verify_code')
-
-
-    if not request.json:
-        return jsonify({"error": "request must be json"}), 400
-    
-    if not request.json.get('uname') or not request.json.get('password'):
-        return jsonify({"error": "uname and password are required"}), 400
-    
-    if not request.json.get('email_verify_code'):
-        return jsonify({"error": "email_verify_code is required"}), 400
-
-    if not request.json.get('email'):
-        return jsonify({"error": "email is required"}), 400
-    
-    if request.json.get('password') != request.json.get('password_verify'):
-        return jsonify({"error": "passwords do not match"}), 400
-    
-    if db.users.find_one({'uname': uname}):
-        return jsonify({"error": "username already exists,perhaps try another?"}), 400
-    
-    if not db.reg_code.find_one({"email":request.json.get('email'),"reg_code":request.json.get('email_verify_code')}): 
-        return jsonify({"error": "email verify code is incorrect"}), 400
-
-    if time.time() - db.reg_code.find_one({"email":email,"reg_code":verify_code})["send_time"] > 300: # 5 minutes
-            db.reg_code.delete_one({"email":email,"reg_code":verify_code})
-            abort(Response("驗證碼已過期!"))
-
-
-    db.users.insert_one({'uname': uname, 'password': password, 'email': email,'reg_time':time.time(),'last_login_time':0})
-    return jsonify({"success": "register success"}), 200
-
-
-@api.route('/api/v1/register/email_verify', methods=['POST'])
-def email_verify():
-    email = request.json.get('email')
-    if not request.json:
-        return jsonify({"error": "request must be json"}), 400
-    
-    if not request.json.get('email'):
-        return jsonify({"error": "email is required"}), 400
-    
-    if db.users.find_one({"email":email}):
-        return jsonify({"error": "email with user already exists"}), 400
-    
-    code = random.randint(100000, 999999)
-
-    if db.reg_code.find_one({"email":email}):
-        db.reg_code.delete_one({"email":email})
-    
-    db.reg_code.insert_one({
-    "email":email,
-    "reg_code":str(code),
-    "send_time":time.time()
-    })
-    msg = Message('SGGS ANON 驗證碼', recipients=[email])
-    msg.body = '您的驗證碼是：' + str(code) +'，有效期為5分鐘。'
-    mail.send(msg)
-    return jsonify({"success": "email verify code sent"}), 200

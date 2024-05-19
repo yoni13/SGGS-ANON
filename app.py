@@ -172,7 +172,8 @@ def post_anonymous_handle():
 @app.route("/message_board", methods=["GET", "POST"])
 def message_board_handle():
     if request.method == "GET":
-        messages = db.mb_message.find([])
+        messages = db.mb_message.find().sort({'_id':-1}).limit(10)
+        
         resp_dict = []
 
         for document in messages:
@@ -182,7 +183,7 @@ def message_board_handle():
                 content = document.get("content")
 
             resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")})))
-        resp_messages = tuple(reversed(resp_dict))
+        resp_messages = resp_dict
 
         return render_template("message_board.html", messages=resp_messages)
     elif request.method == "POST":
@@ -197,6 +198,7 @@ def message_board_handle():
                 ip = request.remote_addr
             else:
                 ip = request.headers.get('cf-connecting-ip') # cloudflare
+            
             if 0 < len(content) <= 200:
                 post_id = generate_random_string(10)
                 if db.mb_message.find_one({"post_id": post_id}):
@@ -233,7 +235,7 @@ def messages_replys():
         if resp_dict == []:
             abort(400)
 
-        resp_messages = tuple(resp_dict)
+        resp_messages = resp_dict
 
         replys = db.mb_replys.find({"post_id": post_id})
         replys_dict = []
@@ -246,7 +248,7 @@ def messages_replys():
                 content = document.get("content")
 
             replys_dict.append((document.get("uname"), document.get("pub_time"), content))
-        resp_replys = tuple(replys_dict)
+        resp_replys = replys_dict
 
         return render_template("replys.html", messages=resp_messages,replys=resp_replys)
     elif request.method == "POST":
