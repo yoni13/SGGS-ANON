@@ -287,7 +287,8 @@ def messages_replys():
                     "ip": ip,
                     "post_id": post_id,
                     "hidden": False,
-                    "might_fake": False
+                    "might_fake": False,
+                    "reply_id": generate_random_string(10) + "reply" + post_id
                 })
                 return redirect(url_for("messages_replys", post_id=post_id))
             else:
@@ -440,7 +441,7 @@ def mod_reply():
             else:
                 content = document.get("content")
 
-            replys_dict.append((document.get("uname"), document.get("pub_time"), content))
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content,document.get('hidden')))
         resp_replys = replys_dict
 
         return render_template("mod_reply.html", messages=resp_messages,replys=resp_replys)
