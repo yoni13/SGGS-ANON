@@ -12,7 +12,8 @@
             "env": {
                 "FLASK_APP": "app.py",
                 "FLASK_DEBUG": "1",
-                "DATABASE_URL": "mongodb://mongo:4rRfhb7yB0HCGlvP@orangepi3b.local:27000"
+                "DATABASE_URL": "mongodb://mongo:4rRfhb7yB0HCGlvP@orangepi3b.local:27000",
+                "email_key":"6RA2EgbHNYaqkn0I"
             },
             "args": [
                 "run"

@@ -42,7 +42,7 @@ app.config.update(
     MAIL_DEFAULT_SENDER=('admin', 'admin@nicewhite.eu.org'),
     MAIL_MAX_EMAILS=10,
     MAIL_USERNAME='yoni980807@gmail.com',
-    MAIL_PASSWORD='LEZw5HG4JRzQBW9r'
+    MAIL_PASSWORD=os.environ['email_key']
 )
 
 def get_mail():
