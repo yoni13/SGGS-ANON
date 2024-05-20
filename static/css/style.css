@@ -337,3 +337,28 @@ hr{
   }
 }
 
+
+.HideBtn{
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #000000;
+    border: 2px solid #ffffff;
+
+    border-radius: 57px;
+}
+
+.MarkMightFakeBtn{
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;;
+    background-color: #333333;
+    border: 2px solid #ffffff;
+    border-radius: 57px;
+}

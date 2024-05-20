@@ -15,7 +15,7 @@ from flask_limiter import Limiter
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.secret_key = b'\xc0:8!E<\x96\xe8\xff\x0b\xd5\xff\x15\xf4m\xb0<\x9b\xc5]\xd5\x03X6'
+app.secret_key = os.environ['app_secret_key']
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
@@ -117,8 +117,8 @@ def reg_handle():
                 "email": email,
                 "reg_time": datetime.datetime.now(),
                 "last_login_time": datetime.datetime.now(),
-                "priv": '1',
-                "state": '1'
+                "priv": 1, # 1: user, 2: admin(mark as might be fake post&comments), 3: super admin (hide&mark)
+                "state": 1 # 1: normal, 2: banned
             })
             db.reg_code.delete_one({"email":email,
                 "reg_code":verify_code})
@@ -162,7 +162,9 @@ def post_anonymous_handle():
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "post_id": generate_random_string(10) + 'anonymous',
-                    "real_uname": real_uname
+                    "real_uname": real_uname,
+                    "hidden": False,
+                    "might_fake": False
                 })
                 return redirect('/message_board')
         else:
@@ -181,7 +183,10 @@ def message_board_handle():
             else:
                 content = document.get("content")
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")})))
+            if document.get("hidden") == True:
+                content = "此留言已被隱藏"
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")}), document.get("might_fake")))
         resp_messages = resp_dict
 
         return render_template("message_board.html", messages=resp_messages)
@@ -206,7 +211,9 @@ def message_board_handle():
                     "uname": user_info.get("uname"),
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "post_id": post_id
+                    "post_id": post_id,
+                    "hidden": False,
+                    "might_fake": False
                 })
                 return redirect(url_for("message_board_handle"))
             else:
@@ -229,7 +236,11 @@ def messages_replys():
                 content = document.get("content").replace("\n","<br>")
             else:
                 content = document.get("content")
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content))
+            
+            if document.get("hidden") == True:
+                content = "此留言已被隱藏"
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake")))
         if resp_dict == []:
             abort(400)
 
@@ -245,7 +256,7 @@ def messages_replys():
             else:
                 content = document.get("content")
 
-            replys_dict.append((document.get("uname"), document.get("pub_time"), content))
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake")))
         resp_replys = replys_dict
 
         return render_template("replys.html", messages=resp_messages,replys=resp_replys)
@@ -274,7 +285,9 @@ def messages_replys():
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                     "ip": ip,
-                    "post_id": post_id
+                    "post_id": post_id,
+                    "hidden": False,
+                    "might_fake": False
                 })
                 return redirect(url_for("messages_replys", post_id=post_id))
             else:
@@ -345,7 +358,92 @@ def send_email_code():
     mail.send(msg)
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
 
+@app.route('/mod')
+def mod():
+    user_info = session.get("user_info")
+    if not user_info:
+        return redirect('/login')
+    if user_info.get("priv") < 2:
+        return Response("權限不足！")
+    if request.method == "GET":
+        messages = db.mb_message.find().sort({'_id':-1}).limit(10)
+        
+        resp_dict = []
 
+        for document in messages:
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")})))
+        resp_messages = resp_dict
+
+        return render_template("moderation.html", messages=resp_messages)
+
+@app.route('/moderation_replys', methods=['GET', 'POST'])
+def mod_reply():
+    user_info = session.get("user_info")
+    if not user_info:
+        return redirect('/login')
+    if user_info.get("priv") < 2:
+        return Response("權限不足！")
+    
+    post_id = request.args.get("post_id")
+
+    if request.method == "POST":
+        if not post_id:
+            abort(400)
+        if request.json.get("action") == "hide":
+            if user_info.get("priv") < 3:
+                return jsonify({"err": 1, "desc": "權限不足！"})
+            if db.mb_message.find_one({"post_id": post_id}).get("hidden") == True:
+                db.mb_message.update_one({"post_id": post_id}, {"$set": {"hidden": False}})
+                return jsonify({"err": 0, "desc": "已顯示！"})
+            else:
+                db.mb_message.update_one({"post_id": post_id}, {"$set": {"hidden": True}})
+                return jsonify({"err": 0, "desc": "已隱藏！"})
+            
+        elif request.json.get("action") == "mark":
+            if db.mb_message.find_one({"post_id": post_id}).get("might_fake") == True:
+                db.mb_message.update_one({"post_id": post_id}, {"$set": {"might_fake": False}})
+                return jsonify({"err": 0, "desc": "已取消標記！"})
+            else:
+                db.mb_message.update_one({"post_id": post_id}, {"$set": {"might_fake": True}})
+                return jsonify({"err": 0, "desc": "已標記！"})
+
+
+    if request.method == "GET":
+        if not post_id:
+            abort(400)
+        messages = db.mb_message.find({"post_id": post_id})
+        resp_dict = []
+
+        for document in messages:
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content))
+        if resp_dict == []:
+            abort(400)
+
+        resp_messages = resp_dict
+
+        replys = db.mb_replys.find({"post_id": post_id})
+        replys_dict = []
+
+        for document in replys:
+
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content))
+        resp_replys = replys_dict
+
+        return render_template("mod_reply.html", messages=resp_messages,replys=resp_replys)
 
 
 @app.route('/policy')

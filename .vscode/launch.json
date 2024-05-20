@@ -13,7 +13,8 @@
                 "FLASK_APP": "app.py",
                 "FLASK_DEBUG": "1",
                 "DATABASE_URL": "mongodb://mongo:4rRfhb7yB0HCGlvP@orangepi3b.local:27000",
-                "email_key":"6RA2EgbHNYaqkn0I"
+                "email_key":"6RA2EgbHNYaqkn0I",
+                "app_secret_key":"76b121c43408cebedb8839cf3f51b1e8"
             },
             "args": [
                 "run"

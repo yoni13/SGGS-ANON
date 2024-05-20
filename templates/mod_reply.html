@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>匿名曙光留言板</title>
+    <title>匿名曙光留言板 | 管理中心</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./static/css/style.css" />
@@ -10,7 +10,7 @@
 <body>
 <div class="navbar">
   <a href="/message_board"><img src="./static/img/logo.png" alt="SGGS logo" >
-  <h1>匿名留言板</h1></a>
+  <h1> 匿名留言板 | 管理中心</h1></a>
 </div>
 
         {% for m in messages %}
@@ -21,12 +21,13 @@
 {% autoescape false %}
             <p class="content">{{ m[2] }}</p>
 {% endautoescape %}
-{% if m[3] %}
-    <p class="reply">管理員:此留言有部分可能不是事實</p>
-    {% endif %}
         </div>
         {% endfor %}
 <hr>
+<br>
+<a href="#" class="MarkMightFakeBtn">Mark/Unmark</a><a href="#" class="HideBtn">Hide/Unhide</a>
+<br><br>
+<hr><hr>
 {% for m in replys %}
         <div class="message">
             <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
@@ -35,26 +36,12 @@
 {% autoescape false %}
             <p class="content">{{ m[2] }}</p>
 {% endautoescape %}
-    {% if m[3] %}
-    <p class="reply">管理員:此留言有部分可能不是事實</p>
-    {% endif %}
         </div>
         {% endfor %}
 
-{% if session.get("user_info") %}
-<div id="mb_form">
-    <form method="POST">
-        <table>
-            <tr><td>回覆：</td><td><textarea id="content" name="content" placeholder="請輸入回覆內容"></textarea></td></tr>
-            <tr><td></td><td><button type="submit">送出</button></td></tr>
-        </table>
-    </form>
-</div>
-{% else %}
 
-<p id="wanttologin">想回覆?<a href="/login">登入</a>或<a href="/reg">註冊</a>！</p>
-{% endif %}
 
 
 </body>
+<script src="/static/js/mod_reply.js"></script>
 </html>

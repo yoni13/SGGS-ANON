@@ -37,6 +37,9 @@
             <span class="pub_time">{{ m[1] }}</span></div>
             {% autoescape false %} <p class="content">{{ m[2] }}</p>{% endautoescape %}
             <p class="reply">回覆數:{{ m[4] }}</p>
+            {% if m[5] %}
+            <p class="reply">管理員:此留言有部分可能不是事實</p>
+            {% endif %}
         </a>
         </div>
             
