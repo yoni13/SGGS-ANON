@@ -346,9 +346,11 @@ def send_email_code():
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
 
 
-@app.route('/privacy_policy')
+
+
+@app.route('/policy')
 def tos():
-    return render_template('privacy.html')
+    return render_template('policy.html')
 
 @app.route('/favicon.ico')
 def favicon():
