@@ -161,7 +161,6 @@ def post_anonymous_handle():
                     "uname": "匿名",
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "ip": ip,
                     "post_id": generate_random_string(10) + 'anonymous',
                     "real_uname": real_uname
                 })
@@ -207,7 +206,6 @@ def message_board_handle():
                     "uname": user_info.get("uname"),
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "ip": ip,
                     "post_id": post_id
                 })
                 return redirect(url_for("message_board_handle"))
