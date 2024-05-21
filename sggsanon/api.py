@@ -1,14 +1,11 @@
-from flask import Blueprint, render_template, abort, request, jsonify, Response, current_app
-from pymongo import MongoClient
+from flask import Blueprint, abort, request, jsonify, current_app
+from app import db
 import time
-import random, string
-from flask_mail import Mail, Message
-import os
-from app import get_mail
-
-mail = get_mail()
-client = MongoClient(os.environ['DATABASE_URL'])
-db = client["message"]
+import random
+import re
+from app import limiter
+from flask_mail import Message
+from app import mail
 
 api = Blueprint('api', __name__)
 
@@ -88,3 +85,28 @@ def mb_board_post():
     else:
         return abort(400)
     
+@api.route('/api/v1/send_email_code', methods=['POST'])
+@limiter.limit("1/second")
+def send_email_code():
+    email = request.json.get('email')
+    if not email:
+        return jsonify({"err": 1, "desc": "請輸入信箱！"})
+
+    if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
+        return jsonify({"err": 1, "desc": "信箱格式錯誤！"})
+
+    if db.mb_user.find_one({"email": email}):
+        return jsonify({"err": 1, "desc": "信箱已被註冊！"})
+
+    code = random.randint(100000, 999999)
+    if db.reg_code.find_one({"email":email}):
+        db.reg_code.delete_one({"email":email})
+    db.reg_code.insert_one({
+    "email":email,
+    "reg_code":str(code),
+    "send_time":time.time()
+    })
+    msg = Message('SGGS ANON 驗證碼', recipients=[email])
+    msg.body = '您的驗證碼是：' + str(code) +'，有效期為5分鐘。'
+    mail.send(msg)
+    return jsonify({"err": 0, "desc": "驗證碼已發送！"})

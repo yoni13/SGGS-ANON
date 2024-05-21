@@ -2,7 +2,7 @@ send_email_code = document.getElementById('send_email_code');
 
 
 send_email_code.onclick = function() {
-    fetch('/send_email_code', {
+    fetch('/api/v1/send_email_code', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
