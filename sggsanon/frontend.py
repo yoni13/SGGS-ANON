@@ -217,10 +217,6 @@ def messages_replys():
         post_id = request.args.get("post_id")
         if content and post_id:
             content = escape(content.strip())
-            if request.headers.get('cf-connecting-ip') == None:
-                ip = request.remote_addr
-            else:
-                ip = request.headers.get('cf-connecting-ip') # cloudflare
 
             if user_info.get("uname") == db.mb_message.find_one({"post_id": post_id}).get("real_uname"):
                 uname = "匿名"
@@ -232,7 +228,6 @@ def messages_replys():
                     "uname": uname,
                     "content": content,
                     "pub_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "ip": ip,
                     "post_id": post_id,
                     "hidden": False,
                     "might_fake": False,
