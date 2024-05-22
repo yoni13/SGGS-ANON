@@ -13,7 +13,7 @@ def favicon():
 
 @static_files.route('/robots.txt')
 def robots():
-    if request.host == 'sggs-indev-sggsanon.nicewhite.xyz':
+    if request.host == 'indev-sggsanon.nicewhite.xyz':
         return redirect('/static/robots_dev.txt')
     if request.host == 'sggsanon.nicewhite.xyz':
         return redirect('/static/robots_prod.txt')
