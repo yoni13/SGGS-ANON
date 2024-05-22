@@ -9,10 +9,10 @@
 <body>
 <div class="navbar">
   <a href="/mod"><img src="/static/img/logo.png" alt="SGGS logo" >
-  <h1> 匿名留言板 | C&M</h1></a>
+  <h1>匿名留言板 | C&M</h1></a>
 </div>
 
-        {% for m in messages %}
+{% for m in replys %}
         <div class="message">
             <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
             <br><br>
@@ -20,27 +20,18 @@
 {% autoescape false %}
             <p class="content">{{ m[2] }}</p>
 {% endautoescape %}
+    {% if m[3] %}
+    <p class="reply">管理員:此留言有部分可能具有爭議</p>
+    {% endif %}
         </div>
-        {% endfor %}
+{% endfor %}
+
+
 <hr>
 <br>
 <a href="#" class="MarkMightFakeBtn">Mark/Unmark</a><a href="#" class="HideBtn">Hide/Unhide</a>
 <br><br>
 <hr><hr>
-{% for m in replys %}
-        <div class="message">
-            <a class="messagelink" href="/mod/moderation_replys?reply_id={{ m[3] }}">
-            <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
-            <br><br>
-            <span class="pub_time">{{ m[1] }}</span></div>
-{% autoescape false %}
-            <p class="content">{{ m[2] }}</p>
-{% endautoescape %}
-             </a>
-        </div>
-        {% endfor %}
-
-
 
 
 </body>

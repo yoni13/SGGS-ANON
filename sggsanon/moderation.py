@@ -86,7 +86,58 @@ def mod_reply():
             else:
                 content = document.get("content")
 
-            replys_dict.append((document.get("uname"), document.get("pub_time"), content,document.get('post_id')))
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content,document.get('reply_id')))
         resp_replys = replys_dict
 
         return render_template("mod_posts.html", messages=resp_messages,replys=resp_replys)
+
+
+@mod.route('/mod/moderation_replys', methods=['GET', 'POST'])
+def mod_replys():
+    user_info = session.get("user_info")
+    if not user_info:
+        return redirect('/login')
+    if user_info.get("priv") < 2:
+        return Response("權限不足！")
+    
+    reply_id = request.args.get("reply_id")
+
+    if request.method == "POST":
+        if not reply_id:
+            abort(400)
+        if request.json.get("action") == "hide":
+            if user_info.get("priv") < 3:
+                return jsonify({"err": 1, "desc": "權限不足！"})
+            if db.mb_replys.find_one({"reply_id": reply_id}).get("hidden") == True:
+                db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"hidden": False}})
+                return jsonify({"err": 0, "desc": "已顯示！"})
+            else:
+                db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"hidden": True}})
+                return jsonify({"err": 0, "desc": "已隱藏！"})
+            
+        elif request.json.get("action") == "mark":
+            if db.mb_replys.find_one({"reply_id": reply_id}).get("might_fake") == True:
+                db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"might_fake": False}})
+                return jsonify({"err": 0, "desc": "已取消標記！"})
+            else:
+                db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"might_fake": True}})
+                return jsonify({"err": 0, "desc": "已標記！"})
+
+
+    if request.method == "GET":
+        if not reply_id:
+            abort(400)
+        messages = db.mb_replys.find({"reply_id": reply_id})
+        resp_dict = []
+
+        for document in messages:
+            if '\n' in document.get("content"):
+                content = document.get("content").replace("\n","<br>")
+            else:
+                content = document.get("content")
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content))
+        if resp_dict == []:
+            abort(400)
+
+        resp_messages = resp_dict
+        return render_template("mod_replys.html", replys=resp_messages)

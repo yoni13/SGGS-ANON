@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./static/css/style.css" />
-    <link rel="canonical" href="https://nicewhite.eu.org/message_board"/>
 </head>
 <body>
 <div class="navbar">
@@ -22,8 +21,11 @@
             <p class="content">{{ m[2] }}</p>
 {% endautoescape %}
 {% if m[3] %}
-    <p class="reply">管理員:此留言有部分可能不是事實</p>
-    {% endif %}
+    <p class="reply">管理員:此留言有部分可能具有爭議</p>
+{% endif %}
+{% if m[4] %}
+    <p class="reply">此回覆已被管理員隱藏</p>
+{% endif %}
         </div>
         {% endfor %}
 <hr>
@@ -36,7 +38,10 @@
             <p class="content">{{ m[2] }}</p>
 {% endautoescape %}
     {% if m[3] %}
-    <p class="reply">管理員:此留言有部分可能不是事實</p>
+    <p class="reply">管理員:此留言有部分可能具有爭議</p>
+    {% endif %}
+    {% if m[4] %}
+    <p class="reply">此回覆已被管理員隱藏</p>
     {% endif %}
         </div>
         {% endfor %}

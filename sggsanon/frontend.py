@@ -136,7 +136,7 @@ def message_board_handle():
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")}), document.get("might_fake")))
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")}), document.get("might_fake"),document.get("hidden")))
         resp_messages = resp_dict
 
         return render_template("message_board.html", messages=resp_messages)
@@ -185,7 +185,7 @@ def messages_replys():
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake")))
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden")))
         if resp_dict == []:
             abort(400)
 
@@ -201,7 +201,10 @@ def messages_replys():
             else:
                 content = document.get("content")
 
-            replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake")))
+            if document.get("hidden") == True:
+                content = "此回覆已被隱藏"
+
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake"), document.get("hidden")))
         resp_replys = replys_dict
 
         return render_template("replys.html", messages=resp_messages,replys=resp_replys)
