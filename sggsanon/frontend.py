@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request, render_template,abort, Response, session, url_for
+from flask import Blueprint, redirect, request, render_template,abort, Response, session
 import time
 import re
 import hashlib
@@ -23,7 +23,7 @@ def index():
 def reg_handle():
     if request.method == "GET":
         if session.get("user_info"):
-            return redirect(url_for("message_board_handle"))
+            return redirect('/message_board')
         return render_template("reg.html")
     elif request.method == "POST":
         uname = request.form.get("uname")
@@ -233,7 +233,7 @@ def messages_replys():
                     "might_fake": False,
                     "reply_id": little_conponment.generate_random_string(10) + "reply" + post_id
                 })
-                return redirect(url_for("messages_replys", post_id=post_id))
+                return redirect("/messages_replys?post_id=" + post_id)
             else:
                 abort(Response("回覆內容長度需在1-200字之間！"))
         else:
