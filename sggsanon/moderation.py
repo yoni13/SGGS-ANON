@@ -8,7 +8,7 @@ mod = Blueprint('mod', __name__)
 def mod_():
     user_info = session.get("user_info")
     if not user_info:
-        return redirect('/login')
+        return redirect('/login?after=mod')
     if user_info.get("priv") < 2:
         return Response("權限不足！")
     if request.method == "GET":
@@ -31,7 +31,7 @@ def mod_():
 def mod_reply():
     user_info = session.get("user_info")
     if not user_info:
-        return redirect('/login')
+        return redirect('/login?after=mod')
     if user_info.get("priv") < 2:
         return Response("權限不足！")
     
@@ -96,7 +96,7 @@ def mod_reply():
 def mod_replys():
     user_info = session.get("user_info")
     if not user_info:
-        return redirect('/login')
+        return redirect('/login?after=mod')
     if user_info.get("priv") < 2:
         return Response("權限不足！")
     

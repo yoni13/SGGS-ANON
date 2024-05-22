@@ -15,11 +15,11 @@
             <form action="/reg" method="POST">
                 <table>
                     
-                    <tr><td>使用者名稱：</td><td><input type="text" id="uname" name="uname" placeholder="使用者名稱" autofocus><span id="uname_tips"></span></td></tr>
-                    <tr><td>密碼：</td><td><input type="password" id="upass" name="upass" placeholder="密碼"></td></tr>
-                    <tr><td>確認密碼：</td><td><input type="password" id="upass2" name="upass2" placeholder="確認密碼"></td></tr>
-                    <tr><td>電子郵件：</td><td><input type="email" id="email" name="email" placeholder="電子郵件"><button type="button" id="send_email_code">發驗證碼</button></td></tr>
-                    <tr><td>驗證碼</td><td><input type="text" id="verify_code" name="verify_code" placeholder="驗證碼"></td></tr>
+                    <tr><td>使用者名稱：</td><td><input type="text" id="uname" name="uname" placeholder="使用者名稱" autofocus required><span id="uname_tips"></span></td></tr>
+                    <tr><td>密碼：</td><td><input type="password" id="upass" name="upass" placeholder="密碼" required></td></tr>
+                    <tr><td>確認密碼：</td><td><input type="password" id="upass2" name="upass2" placeholder="確認密碼" required></td></tr>
+                    <tr><td>電子郵件：</td><td><input type="email" id="email" name="email" placeholder="電子郵件" required><button type="button" id="send_email_code">發驗證碼</button></td></tr>
+                    <tr><td>驗證碼</td><td><input type="text" id="verify_code" name="verify_code" placeholder="驗證碼" required></td></tr>
                     <tr><td>註冊前請先閱讀<a href="/policy">條款</a></td></tr>
                     <tr><td><button type="submit">註冊</button></td></tr>
                 </table>

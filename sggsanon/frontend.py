@@ -33,39 +33,39 @@ def reg_handle():
         email = request.form.get("email")
 
         if not (uname and uname.strip() and upass and upass2 and verify_code and email):
-            abort(400)
+            return '<script>alert("請填寫完整！");history.back();</script>'
         if not db.reg_code.find_one({"email":email,"reg_code":verify_code}):
-            abort(Response("驗證碼錯誤!"))
+            return '<script>alert("驗證碼錯誤!");history.back();</script>'
 
         # Verify time
         if time.time() - db.reg_code.find_one({"email":email,"reg_code":verify_code})["send_time"] > 300: # 5 minutes
             db.reg_code.delete_one({"email":email,"reg_code":verify_code})
-            abort(Response("驗證碼已過期!"))
+            return '<script>alert("驗證碼已過期!");history.back();</script>'
 
         if re.search(r"[\u4E00-\u9FFF]", uname):
-            abort(Response("中文名稱請使用英文名稱！"))
+            return '<script>alert("請使用英文名稱！");history.back();</script>'
 
         if not re.fullmatch("[a-zA-Z0-9_]{4,20}", uname):
-            abort(Response("帳號名稱請介於4-20個字，且僅接受英文、數字、和底線"))
+            return '<script>alert("帳號名稱請介於4-20個字，且僅接受英文、數字、和底線");history.back();</script>'
 
         cur = db.mb_user.find_one({"uname": uname})
         if cur:
-            abort(Response("名子已被註冊！"))
+            return '<script>alert("名子被別人使用！");history.back();</script>'
         findemail = db.mb_user.find_one({"email": email})
         if findemail:
-            abort(Response("信箱已被註冊！"))
+            return '<script>alert("信箱已被註冊！");history.back();</script>'
 
         if not upass == upass2:
-            abort(Response("密碼錯誤！"))
+            return '<script>alert("密碼錯誤！");history.back();</script>'
 
         if len(upass) < 6:
-            abort(Response("密碼長度需大於6！"))
+            return '<script>alert("密碼長度需大於6！");history.back();</script>'
         
         if len(upass) > 20:
-            abort(Response("密碼長度需小於20！"))
+            return '<script>alert("密碼長度需小於20！");history.back();</script>'
 
         if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
-            abort(Response("信箱格式錯誤！"))
+            return '<script>alert("信箱格式錯誤！");history.back();</script>'
 
         try:
             db.mb_user.insert_one({
@@ -80,7 +80,7 @@ def reg_handle():
             db.reg_code.delete_one({"email":email,
                 "reg_code":verify_code})
         except:
-            abort(Response("註冊失敗！"))
+            return '<script>alert("註冊失敗！");history.back();</script>'
 
         return redirect('/login?reg=1')
 
@@ -118,7 +118,7 @@ def post_anonymous_handle():
                 })
                 return redirect('/message_board')
         else:
-            abort(Response('留言不能為空'))
+            return '<script>alert("留言不能為空！");history.back();</script>'
 
 @frontend.route("/message_board", methods=["GET", "POST"])
 def message_board_handle():
@@ -143,7 +143,7 @@ def message_board_handle():
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
-            abort(Response("請先登入！"))
+            return '<script>alert("請先登入！");location.href="/login?after=message_board";</script>'
 
         content = request.form.get("content")
         if content:
@@ -162,9 +162,9 @@ def message_board_handle():
                 })
                 return redirect('/message_board')
             else:
-                abort(Response("留言內容長度需在1-200字之間！"))
+                return '<script>alert("留言內容長度需在1-200字之間！");history.back();</script>'
         else:
-            abort(Response("留言內容不能為空！"))
+            return '<script>alert("留言內容不能為空！");history.back();</script>'
 
 
 @frontend.route('/messages_replys', methods=['GET', 'POST'])
@@ -187,7 +187,7 @@ def messages_replys():
 
             resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden")))
         if resp_dict == []:
-            abort(400)
+            abort(404)
 
         resp_messages = resp_dict
 
@@ -211,7 +211,7 @@ def messages_replys():
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
-            abort(Response("請先登入！"))
+            return '<script>alert("請先登入！");location.href="/login?after=messages_replys&post_id'+request.args.get+('post_id')+'";</script>'
 
         content = request.form.get("content")
         post_id = request.args.get("post_id")
@@ -235,9 +235,9 @@ def messages_replys():
                 })
                 return redirect("/messages_replys?post_id=" + post_id)
             else:
-                abort(Response("回覆內容長度需在1-200字之間！"))
+                return '<script>alert("回覆內容長度需在1-200字之間！");history.back();</script>'
         else:
-            abort(Response("回覆內容不能為空！"))
+            return '<script>alert("回覆內容不能為空！");history.back();</script>'
 
 @frontend.route("/login", methods=["GET", "POST"])
 def login_handle():
@@ -270,8 +270,13 @@ def login_handle():
                 }
                 db.mb_user.update_one({"uname": uname}, {"$set": {"last_login_time": datetime.datetime.now()}})
             else:
-                abort(Response("login失敗！"))
+                return '<script>alert("登入失敗！");history.back();</script>'
         except:
-            abort(Response("login失敗！"))
-
+            return '<script>alert("登入失敗！");history.back();</script>'
+        if request.args.get("after"):
+            if request.args.get("after") == "message_board":
+                return redirect('/message_board')
+            elif request.args.get("after") == "messages_replys":
+                return redirect('/messages_replys?post_id=' + request.args.get("post_id"))
+            
         return redirect('/message_board')
