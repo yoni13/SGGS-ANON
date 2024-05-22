@@ -243,6 +243,13 @@ def messages_replys():
 def login_handle():
     if request.method == "GET":
         if session.get("user_info"):
+            if request.args.get("after"):
+                if request.args.get("after") == "message_board":
+                    return redirect('/message_board')
+                elif request.args.get("after") == "messages_replys":
+                    return redirect('/messages_replys?post_id=' + request.args.get("post_id"))
+                elif request.args.get("after") == "mod":
+                    return redirect('/mod')
             return redirect('/message_board')
         return Response(render_template("login.html") + "<script>if (location.search == '?reg=1') {alert('註冊成功！')}</script>")
     elif request.method == "POST":
