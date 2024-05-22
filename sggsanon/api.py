@@ -14,6 +14,10 @@ api = Blueprint('api', __name__)
 def index():
     return 'This is the sggs-anon API v1'
 
+@api.route('/api/v1/bear')
+def bear():
+    return jsonify({"bear": "ʕ·ᴥ·ʔ"})
+
 @api.route('/api/v1/mb_board/')
 def mb_board():
 
