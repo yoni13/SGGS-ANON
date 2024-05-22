@@ -211,7 +211,7 @@ def messages_replys():
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
-            return '<script>alert("請先登入！");location.href="/login?after=messages_replys&post_id'+request.args.get('post_id')+'";</script>'
+            return '<script>alert("請先登入！");location.href="/login?after=messages_replys&post_id='+request.args.get('post_id')+'";</script>'
 
         content = request.form.get("content")
         post_id = request.args.get("post_id")
