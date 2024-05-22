@@ -27,7 +27,7 @@ def mod_():
 
         return render_template("moderation.html", messages=resp_messages)
 
-@mod.route('/mod/moderation_replys', methods=['GET', 'POST'])
+@mod.route('/mod/moderation_posts', methods=['GET', 'POST'])
 def mod_reply():
     user_info = session.get("user_info")
     if not user_info:
@@ -86,7 +86,7 @@ def mod_reply():
             else:
                 content = document.get("content")
 
-            replys_dict.append((document.get("uname"), document.get("pub_time"), content,document.get('hidden')))
+            replys_dict.append((document.get("uname"), document.get("pub_time"), content,document.get('post_id')))
         resp_replys = replys_dict
 
-        return render_template("mod_reply.html", messages=resp_messages,replys=resp_replys)
+        return render_template("mod_posts.html", messages=resp_messages,replys=resp_replys)
