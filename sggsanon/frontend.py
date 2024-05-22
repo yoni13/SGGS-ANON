@@ -278,5 +278,7 @@ def login_handle():
                 return redirect('/message_board')
             elif request.args.get("after") == "messages_replys":
                 return redirect('/messages_replys?post_id=' + request.args.get("post_id"))
+            elif request.args.get("after") == "mod":
+                return redirect('/mod')
             
         return redirect('/message_board')
