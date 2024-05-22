@@ -17,7 +17,7 @@
     {% for m in messages %}
     
     <div class="message">
-        <a class="messagelink" href="moderation_replys?post_id={{ m[3] }}">
+        <a class="messagelink" href="/mod/moderation_replys?post_id={{ m[3] }}">
         <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
         <br><br>
         <span class="pub_time">{{ m[1] }}</span></div>

@@ -27,7 +27,7 @@ def mod_():
 
         return render_template("moderation.html", messages=resp_messages)
 
-@mod.route('/moderation_replys', methods=['GET', 'POST'])
+@mod.route('/mod/moderation_replys', methods=['GET', 'POST'])
 def mod_reply():
     user_info = session.get("user_info")
     if not user_info:
