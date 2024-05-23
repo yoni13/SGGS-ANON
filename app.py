@@ -1,5 +1,5 @@
  # Global APP settings
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_mail import Mail
 from pymongo import MongoClient
 import os
@@ -54,6 +54,11 @@ app.register_blueprint(api.api)
 app.register_blueprint(moderation.mod)
 app.register_blueprint(static_files.static_files)
 app.register_blueprint(frontend.frontend)
+
+
+@app.route('/reaction_test')
+def reaction_test():
+    return render_template('test.html')
 
 
 
