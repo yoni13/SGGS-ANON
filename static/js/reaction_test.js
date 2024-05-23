@@ -1,7 +1,5 @@
 const message = document.getElementsByClassName("message")[0];
 const reaction_bar = document.getElementById("reaction");
-var rect_reactbar = reaction_bar.getBoundingClientRect();
-original_bottom = rect_reactbar.bottom;
 
 
 // This handler will be executed every time the cursor
@@ -35,7 +33,7 @@ for (var i = 0; i < messages.length; i++) {
       messages[i].addEventListener("mouseout", function() {
           this.style.fontSize = "30px";
       });
-      
+
       messages[i].addEventListener("click", function() {
           fetch('/api/v1/reaction', {
               method: 'POST',
