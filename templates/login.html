@@ -4,19 +4,19 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>匿名曙光留言板 | 歡迎登入!</title>
-        <link rel="stylesheet" href="./static/css/style.css" />
+        <link rel="stylesheet" href="/static/css/style.css" />
     </head>
     <body>
         <div class="navbar">
-            <a href="/"><img src="./static/img/logo.png" alt="SGGS logo" >
+            <a href="/"><img src="/static/img/logo.png" alt="SGGS logo" >
             <h1 >匿名留言板</h1></a>
           </div>
         <div id="reg_form">
             
-            <form action="/login" method="POST">
+            <form method="POST">
                 <table>
-                    <tr><td>使用者名稱：</td><td><input type="text" id="uname" name="uname" placeholder="使用者名稱" autofocus></td></tr>
-                    <tr><td>密碼：</td><td><input type="password" id="upass" name="upass" placeholder="密碼"></td></tr>
+                    <tr><td>使用者名稱：</td><td><input type="text" id="uname" name="uname" placeholder="使用者名稱" autofocus required></td></tr>
+                    <tr><td>密碼：</td><td><input type="password" id="upass" name="upass" placeholder="密碼" required></td></tr>
                     <tr><td></td><td><button type="submit">登入</button>
                     <button type="button" onclick="location.href='/reg'">註冊</button></td></tr>
                     
