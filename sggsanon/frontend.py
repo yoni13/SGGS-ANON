@@ -266,11 +266,8 @@ def login_handle():
             })
             if dbres:
                 session["user_info"] = {
-                    "uid": dbres.get("uid"),
                     "uname": dbres.get("uname"),
                     "email": dbres.get("email"),
-                    "reg_time": dbres.get("reg_time"),
-                    "last_login_time": dbres.get("last_login_time"),
                     "priv": dbres.get("priv"),
                     "state": dbres.get("state"),
                     "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
