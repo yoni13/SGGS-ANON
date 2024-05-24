@@ -43,7 +43,20 @@
             {% if m[6] %}
             <p class="reply">此回覆已被管理員隱藏</p>
             {% endif %}
-        </a>
+            </a>
+            {% if session.get("user_info") %}
+            <div class="reaction" id="{{ m[3] }}">
+                <a class="reaction_emotes" id="like">👍</a>
+                <a class="reaction_emotes" id="dislike">👎</a>
+                <a class="reaction_emotes" id="love">❤️</a>
+                <a class="reaction_emotes" id="angry">🤬</a>
+                <a class="reaction_emotes" id="sad">😢</a>
+                <a class="reaction_emotes" id="laugh">🤣</a>
+                <a class="reaction_emotes" id="surprise">😮</a>
+                <a class="reaction_emotes" id="speechless">😶</a>
+            </div>
+            {% endif %}
+        
         </div>
             
         {% endfor %}
@@ -57,4 +70,5 @@
 
 </body>
 <script src="/static/js/mb.js"></script>
+<script src="/static/js/reaction_prod.js"></script>
 </html>

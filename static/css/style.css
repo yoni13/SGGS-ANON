@@ -363,9 +363,7 @@ hr{
     border-radius: 57px;
 }
 
-#reaction{
-    display: none;
-    margin-top: 40px;
+.reaction{
     margin-left: 20px;
     margin-right: 20px;
     padding: 20px;
@@ -375,7 +373,8 @@ hr{
     background-color: #303030;
     border: 2px solid #404040;
     border-radius: 57px;
-    width: 50%;
+    overflow: hidden;
+    max-width: max-content;
     letter-spacing: 10px;
 }
 
