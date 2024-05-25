@@ -6,9 +6,11 @@ let trigger_ = false
 
 
 if (location.href.includes('mod')){
+    var mod = true
     var Hereurl = '/mod/moderation_posts?post_id='
 }
 else{
+    var mod = false
     var Hereurl = '/messages_replys?post_id='
 }
 
@@ -40,20 +42,23 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                     meselement += `<p class="reply">此回覆已被管理員隱藏</p>`;
                 }
                 meselement += '</a>';
+                if (!mod){
                 ractionelement = `
                 <div class="reaction" id="${data[i].post_id}">
                 <a class="reaction_emotes" id="like">👍${data[i].like}</a>
                 <a class="reaction_emotes" id="dislike">👎${data[i].dislike}</a>
                 <a class="reaction_emotes" id="laugh">🤣${data[i].laugh}</a>
                 </div>
-                `
+                `}
+                else{
+                ractionelement = ''}
 
                 mb.innerHTML = meselement + ractionelement + `</div>`;
 
-
+                
                 document.getElementById('message_area').appendChild(mb);
 
-                                
+                if (!mod){                
                 for (var r = 0; r < reaction_emotes.length; r++) {
                     reaction_emotes[r].addEventListener('mouseover', function() {
                         this.style.cursor = 'pointer';
@@ -82,7 +87,7 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                             
                             this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
                         })
-                    })}
+                    })}}
                     
 
             }

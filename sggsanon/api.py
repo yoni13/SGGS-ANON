@@ -120,7 +120,7 @@ def send_email_code():
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
 
 @api.route('/api/v1/reaction', methods=['POST'])
-@limiter.limit("1/second")
+@limiter.limit("0.5/second")
 def reactionAPI():
     post_id = request.json.get('post_id')
     reaction = request.json.get('reaction')
