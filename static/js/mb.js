@@ -2,7 +2,7 @@ window.onload = () => {
     sessionStorage.setItem('page', 1);
 }
 let trigger_ = false
-
+let addedmessage = 0
 
 
 if (location.href.includes('mod')){
@@ -41,13 +41,14 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                 if (data[i].hidden === true){
                     meselement += `<p class="reply">此回覆已被管理員隱藏</p>`;
                 }
+
                 meselement += '</a>';
-                if (!mod){
+                if (mod === false && data[i].login == true) {
                 ractionelement = `
                 <div class="reaction" id="${data[i].post_id}">
-                <a class="reaction_emotes" id="like">👍${data[i].like}</a>
-                <a class="reaction_emotes" id="dislike">👎${data[i].dislike}</a>
-                <a class="reaction_emotes" id="laugh">🤣${data[i].laugh}</a>
+                <a class="reaction_emotes new${addedmessage.toString()}" id="like">👍${data[i].like}</a>
+                <a class="reaction_emotes new${addedmessage.toString()}" id="dislike">👎${data[i].dislike}</a>
+                <a class="reaction_emotes new${addedmessage.toString()}" id="laugh">🤣${data[i].laugh}</a>
                 </div>
                 `}
                 else{
@@ -57,7 +58,8 @@ document.getElementsByTagName('body')[0].onscroll = () => {
 
                 
                 document.getElementById('message_area').appendChild(mb);
-
+                
+                reaction_emotes = document.getElementsByClassName(`reaction_emotes new${addedmessage.toString()}`);
                 if (!mod){                
                 for (var r = 0; r < reaction_emotes.length; r++) {
                     reaction_emotes[r].addEventListener('mouseover', function() {
@@ -87,9 +89,11 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                             
                             this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
                         })
-                    })}}
+                    })
+                    addedmessage += 1
+                }}
                     
-
+                    
             }
             if (data.length === 0){
                 document.getElementById('loading_text').innerHTML = '沒有更多東西了；('
