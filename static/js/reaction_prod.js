@@ -22,7 +22,7 @@ for (var i = 0; i < reaction_emotes.length; i++) {
         })
         .then((response) => response.json())
         .then((data) => {
-            if (data['desc']) {
+            if (data['err'] === 1) {
                 alert(data['desc']);
                 return;
             }

@@ -83,7 +83,7 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                         })
                         .then((response) => response.json())
                         .then((data) => {
-                            if (data['desc'] && data['err'] === 1) {
+                            if (data['err'] === 1) {
                                 alert(data['desc']);
                                 return;
                             }
