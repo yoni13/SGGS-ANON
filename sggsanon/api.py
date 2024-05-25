@@ -40,8 +40,12 @@ def mb_board():
     res = []
     for data in datas:
         replys_count = db.mb_replys.count_documents({"post_id": data['post_id']})
-
-        info = {'uname': data['uname'], 'content': data['content'], 'pub_time': data['pub_time'], 'post_id': data['post_id'], 'replys_count': replys_count}
+        if data['hidden']:
+            content = '此留言已被隱藏'
+        else:
+            content = data['content']
+        
+        info = {'uname': data['uname'], 'content': content, 'pub_time': data['pub_time'], 'post_id': data['post_id'], 'replys_count': replys_count,'might_fake': data['might_fake'],'hidden': data['hidden'],'like':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "like"}),'dislike':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "dislike"}),'laugh':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "laugh"})}
         res.append(info)
 
     if request.args.get('reverse') == '1':
@@ -116,6 +120,7 @@ def send_email_code():
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
 
 @api.route('/api/v1/reaction', methods=['POST'])
+@limiter.limit("1/second")
 def reactionAPI():
     post_id = request.json.get('post_id')
     reaction = request.json.get('reaction')
