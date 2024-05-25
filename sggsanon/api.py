@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, request, jsonify, current_app
+from flask import Blueprint, abort, request, jsonify, session
 from app import db
 import time
 import random
@@ -114,3 +114,40 @@ def send_email_code():
     msg.body = '您的驗證碼是：' + str(code) +'，有效期為5分鐘。'
     mail.send(msg)
     return jsonify({"err": 0, "desc": "驗證碼已發送！"})
+
+@api.route('/api/v1/reaction', methods=['POST'])
+def reactionAPI():
+    post_id = request.json.get('post_id')
+    reaction = request.json.get('reaction')
+
+    user_info = session.get("user_info")
+
+    if not user_info:
+        return jsonify({"err": 1, "desc": "請先登入！"})
+
+    if not post_id or not reaction:
+        return jsonify({"err": 1, "desc": "post_id and reaction is required!"})
+    
+    if reaction not in ['like', 'dislike','laugh']:
+        return jsonify({"err": 1, "desc": "reaction must one of like, dislike, laugh"})
+    
+    if not db.mb_message.find_one({"post_id": post_id}):
+        return jsonify({"err": 1, "desc": "post_id not exist!"})
+    
+
+    if db.mb_reaction.find_one({"post_id": post_id, "uname": user_info['uname']}):
+        try:
+            if reaction == db.mb_reaction.find_one({"post_id": post_id, "uname": user_info['uname'], "reaction": reaction})['reaction']:
+                db.mb_reaction.delete_one({"post_id": post_id, "uname": user_info['uname'], "reaction": reaction})
+        except TypeError: # user reacted to other emotes before
+            db.mb_reaction.update_one({"post_id": post_id, "uname": user_info['uname']}, {"$set": {"reaction": reaction}})
+
+    else:
+        db.mb_reaction.insert_one({"post_id": post_id, "uname": user_info['uname'], "reaction": reaction})
+
+    reactions = []
+    for i in ['like', 'dislike', 'laugh']:
+        reactions.append(db.mb_reaction.count_documents({"post_id": post_id, "reaction": i}))
+
+    return jsonify({"err": 0, "desc": "success", "reaction": reactions})
+

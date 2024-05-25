@@ -378,3 +378,10 @@ hr{
     letter-spacing: 10px;
 }
 
+@media screen and (max-width: 800px){
+    .reaction{
+        letter-spacing: 0px;
+        margin-left: 0px;
+    }
+    
+}

@@ -12,14 +12,24 @@ for (var i = 0; i < reaction_emotes.length; i++) {
     reaction_emotes[i].addEventListener('click', function() {
         fetch('/api/v1/reaction', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                reaction: this.innerHTML,
+                reaction: this.id,
                 post_id: this.parentElement.id
             })
         })
-        .catch((error) => {
-            alert('Error:', error);
-          }
-    )}
-    )
-}
+        .then((response) => response.json())
+        .then((data) => {
+            this.parentElement.children[0].innerHTML = '👍' + data['reaction'][0]
+            
+            this.parentElement.children[1].innerHTML = '👎' + data['reaction'][1]
+            
+            this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
+        })
+        // .catch((error) => {
+        //     alert('Error:', error);
+        //   
+    })}
+    
