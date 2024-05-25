@@ -267,6 +267,10 @@ hr{
     color: #ffffff;
 }
 
+#post_anonymous_warning p{
+    padding-left: 15px;
+}
+
 #privacy{
     margin-top: 40px;
     margin-left: 20px;
