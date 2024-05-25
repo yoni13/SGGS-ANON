@@ -380,7 +380,7 @@ hr{
 
 @media screen and (max-width: 800px){
     .reaction{
-        letter-spacing: 0px;
+        letter-spacing: 3px;
         margin-left: 0px;
         color: #8a8a8a;
     }
