@@ -43,7 +43,7 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                 }
 
                 meselement += '</a>';
-                if (mod === false && data[i].login == true) {
+                if (mod === false) {
                 ractionelement = `
                 <div class="reaction" id="${data[i].post_id}">
                 <a class="reaction_emotes new${addedmessage.toString()}" id="like">👍${data[i].like}</a>
@@ -83,6 +83,10 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                         })
                         .then((response) => response.json())
                         .then((data) => {
+                            if (data['desc']) {
+                                alert(data['desc']);
+                                return;
+                            }
                             this.parentElement.children[0].innerHTML = '👍' + data['reaction'][0]
                             
                             this.parentElement.children[1].innerHTML = '👎' + data['reaction'][1]

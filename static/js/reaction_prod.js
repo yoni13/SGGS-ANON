@@ -22,14 +22,16 @@ for (var i = 0; i < reaction_emotes.length; i++) {
         })
         .then((response) => response.json())
         .then((data) => {
+            if (data['desc']) {
+                alert(data['desc']);
+                return;
+            }
             this.parentElement.children[0].innerHTML = '👍' + data['reaction'][0]
-            
             this.parentElement.children[1].innerHTML = '👎' + data['reaction'][1]
-            
             this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
         })
-        // .catch((error) => {
-        //     alert('Error:', error);
-        //   
+        .catch((error) => {
+            alert('Error:', error);
+        });
     })}
     

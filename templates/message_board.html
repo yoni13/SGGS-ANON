@@ -44,13 +44,13 @@
             <p class="reply">此回覆已被管理員隱藏</p>
             {% endif %}
             </a>
-            {% if session.get("user_info") %}
+
             <div class="reaction" id="{{ m[3] }}">
                 <a class="reaction_emotes" id="like">👍{{ m[7] }}</a>
                 <a class="reaction_emotes" id="dislike">👎{{ m[8] }}</a>
                 <a class="reaction_emotes" id="laugh">🤣{{ m[9] }}</a>
             </div>
-            {% endif %}
+
         
         </div>
             
