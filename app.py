@@ -1,5 +1,5 @@
  # Global APP settings
-from flask import Flask, request, render_template
+from flask import Flask, request
 from flask_mail import Mail
 from pymongo import MongoClient
 import os
