@@ -193,8 +193,8 @@ def messages_replys():
             dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
             laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
 
-            if len(document.get("content")) > 10:
-                title = document.get('uname') + ' 說:' + document.get("content")[:10]
+            if len(document.get("content")) > 20:
+                title = document.get('uname') + ' 說:' + document.get("content")[:20] + '...'
             else:
                 title = document.get('uname') + ' 說:' + document.get("content")
 
