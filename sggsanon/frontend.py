@@ -193,7 +193,12 @@ def messages_replys():
             dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
             laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count,document.get("post_id")))
+            if len(document.get("content")) > 10:
+                title = document.get('uname') + ' 說:' + document.get("content")[:10]
+            else:
+                title = document.get('uname') + ' 說:' + document.get("content")
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count,document.get("post_id"),title))
         if resp_dict == []:
             abort(404)
 
@@ -215,7 +220,7 @@ def messages_replys():
             replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake"), document.get("hidden")))
         resp_replys = replys_dict
 
-        return render_template("replys.html", messages=resp_messages,replys=resp_replys)
+        return render_template("replys.html", messages=resp_messages,replys=resp_replys,title=title)
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
