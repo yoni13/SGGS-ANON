@@ -386,7 +386,7 @@ hr {
     padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 30px;
-    color: #000000;
+    color: #acacac;
     background-color: #303030;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -399,7 +399,6 @@ hr {
     .reaction {
         letter-spacing: 1px;
         margin-left: 0px;
-        color: #8a8a8a;
     }
 
 }
