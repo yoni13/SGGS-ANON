@@ -14,11 +14,6 @@ limiter = limiter
 
 frontend = Blueprint('frontend', __name__)
 
-@frontend.route("/")
-def index():
-    return redirect('/message_board')
-
-
 @frontend.route("/reg", methods=["GET", "POST"])
 def reg_handle():
     if request.method == "GET":
@@ -299,3 +294,8 @@ def login_handle():
                 return redirect('/mod')
             
         return redirect('/message_board')
+
+
+@frontend.route('/')
+def test():
+    return render_template('root.html')

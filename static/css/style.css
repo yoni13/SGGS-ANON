@@ -71,7 +71,6 @@ a {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -135,7 +134,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -214,7 +212,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -260,7 +257,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -283,7 +279,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -304,7 +299,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -360,7 +354,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #000000;
     border: 2px solid #ffffff;
 
@@ -374,7 +367,6 @@ hr {
     font-family: 'Inter', sans-serif;
     font-size: 20px;
     color: #afafaf;
-    ;
     background-color: #333333;
     border: 2px solid #ffffff;
     border-radius: 57px;
@@ -401,4 +393,37 @@ hr {
         margin-left: 0px;
     }
 
+}
+
+
+#root{
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    color: #afafaf;
+    background-color: #404040;
+    border: 2px solid #404040;
+    border-radius: 57px;
+}
+
+#root img{
+    float:left;
+    margin-right:5px;
+}
+
+#root h1{
+    display:inline;
+    font-family: 'Orienta', sans-serif;
+    color: #FFFFFF;
+    font-size: 30px;
+}
+
+#root p{
+    font-family: 'Inter', sans-serif;
+    color: #afafaf;
+    font-size: 20px;
+    padding-left: 20px;
 }
