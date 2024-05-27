@@ -11,18 +11,18 @@ body {
 }
 
 a {
-    -webkit-tap-highlight-color:transparent;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .navbar {
-    top : 20px;
+    top: 20px;
     border-radius: 23px;
     background-color: #404040;
     margin: 0px 20px;
     height: fit-content;
 }
 
-.navbar img{
+.navbar img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -31,7 +31,7 @@ a {
     margin-top: 10px;
 }
 
-.navbar h1{
+.navbar h1 {
     display: inline;
     margin-top: 10px;
     bottom: 15px;
@@ -40,7 +40,7 @@ a {
     font-size: 30px;
 }
 
-.navbar a{
+.navbar a {
     text-decoration: none;
 }
 
@@ -57,12 +57,12 @@ a {
     border-radius: 57px;
 }
 
-#wanttologin a{
+#wanttologin a {
     text-decoration: none;
     color: #ffffff;
 }
 
-#mb_form{
+#mb_form {
     margin-right: 20px;
     max-width: 100%;
     margin-top: 40px;
@@ -70,13 +70,14 @@ a {
     padding: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
 }
 
-#mb_form textarea{
+#mb_form textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -98,7 +99,7 @@ a {
 
 }
 
-#mb_form button:hover{
+#mb_form button:hover {
     background-color: #afafaf;
     color: #404040;
 }
@@ -115,31 +116,32 @@ a {
     text-decoration: none;
 }
 
-#mb_form a:hover{
+#mb_form a:hover {
     background-color: #afafaf;
     color: #404040;
 }
 
 
-hr{
+hr {
     border: 1px solid #afafaf;
     margin: 20px 20px;
 }
 
-.message{
+.message {
     margin-top: 40px;
     margin-left: 20px;
     margin-right: 20px;
     padding: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
 }
 
-.message .profileimg{
+.message .profileimg {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -148,7 +150,7 @@ hr{
     margin-top: 10px;
 }
 
-.message .uname{
+.message .uname {
     display: inline;
     margin-top: 10px;
     bottom: 15px;
@@ -157,7 +159,7 @@ hr{
     font-size: 30px;
 }
 
-.message .pub_time{
+.message .pub_time {
     display: inline;
     margin-top: 10px;
     bottom: 15px;
@@ -167,7 +169,7 @@ hr{
     padding-left: 20px;
 }
 
-.message .content{
+.message .content {
     margin-top: 10px;
     bottom: 12px;
     font-family: 'Inter', sans-serif;
@@ -177,7 +179,7 @@ hr{
     word-wrap: break-word;
 }
 
-.message .reply{
+.message .reply {
     bottom: 12px;
     font-family: 'Inter', sans-serif;
     color: #afafaf;
@@ -185,39 +187,40 @@ hr{
     padding-left: 20px;
 }
 
-.message a{
+.message a {
     text-decoration: none;
-    
+
 }
 
-.message:hover{
+.message:hover {
     border: #FFFFFF 2px solid;
 }
 
 
-@media  screen and (min-width: 800px){
-    html{
+@media screen and (min-width: 800px) {
+    html {
         justify-content: center;
         width: 80%;
         margin-left: auto;
-  margin-right: auto;
+        margin-right: auto;
     }
 }
 
-#reg_form{
+#reg_form {
     margin-top: 40px;
     margin-left: 20px;
     margin-right: 10px;
     padding: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
 }
 
-#reg_form input{
+#reg_form input {
     width: 80%;
     padding: 10px;
     margin: 10px 0;
@@ -227,7 +230,7 @@ hr{
     color: #afafaf;
 }
 
-#reg_form button{
+#reg_form button {
     padding: 10px;
     margin: 10px 0;
     border-radius: 57px;
@@ -239,66 +242,69 @@ hr{
 
 }
 
-#reg_form button:hover{
+#reg_form button:hover {
     background-color: #afafaf;
     color: #404040;
 }
 
-#reg_form a{
+#reg_form a {
     text-decoration: none;
     color: #ffffff;
 }
 
-#post_anonymous_warning{
+#post_anonymous_warning {
     margin-top: 40px;
     margin-left: 20px;
     margin-right: 20px;
     padding: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
 }
 
-#post_anonymous_warning a{
+#post_anonymous_warning a {
     text-decoration: none;
     color: #ffffff;
 }
 
-#post_anonymous_warning p{
+#post_anonymous_warning p {
     padding-left: 15px;
 }
 
-#privacy{
+#privacy {
     margin-top: 40px;
     margin-left: 20px;
     margin-right: 20px;
     padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
     word-wrap: break-word;
 }
 
-#privacy a{
+#privacy a {
     text-decoration: none;
     color: #ffffff;
 }
 
 
-#loadmore{
+#loadmore {
     margin-top: 40px;
     margin-left: 20px;
     margin-right: 20px;
     padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #404040;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -307,73 +313,80 @@ hr{
 
 .lds-hourglass,
 .lds-hourglass:after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
+
 .lds-hourglass {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
 }
+
 .lds-hourglass:after {
-  content: " ";
-  display: block;
-  border-radius: 50%;
-  width: 0;
-  height: 0;
-  margin: 8px;
-  box-sizing: border-box;
-  border: 32px solid currentColor;
-  border-color: currentColor transparent currentColor transparent;
-  animation: lds-hourglass 1.2s infinite;
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 8px;
+    box-sizing: border-box;
+    border: 32px solid currentColor;
+    border-color: currentColor transparent currentColor transparent;
+    animation: lds-hourglass 1.2s infinite;
 }
+
 @keyframes lds-hourglass {
-  0% {
-    transform: rotate(0);
-    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  }
-  50% {
-    transform: rotate(900deg);
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-  }
-  100% {
-    transform: rotate(1800deg);
-  }
+    0% {
+        transform: rotate(0);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    50% {
+        transform: rotate(900deg);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    100% {
+        transform: rotate(1800deg);
+    }
 }
 
 
-.HideBtn{
+.HideBtn {
     margin-left: 20px;
     margin-right: 20px;
     padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #000000;
     border: 2px solid #ffffff;
 
     border-radius: 57px;
 }
 
-.MarkMightFakeBtn{
+.MarkMightFakeBtn {
     margin-left: 20px;
     margin-right: 20px;
     padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 20px;
-    color: #afafaf;;
+    color: #afafaf;
+    ;
     background-color: #333333;
     border: 2px solid #ffffff;
     border-radius: 57px;
 }
 
-.reaction{
+.reaction {
     margin-left: 20px;
     margin-right: 20px;
     padding: 20px;
     font-family: 'Inter', sans-serif;
     font-size: 30px;
-    color: #000000;;
+    color: #000000;
     background-color: #303030;
     border: 2px solid #404040;
     border-radius: 57px;
@@ -382,11 +395,11 @@ hr{
     letter-spacing: 10px;
 }
 
-@media screen and (max-width: 800px){
-    .reaction{
+@media screen and (max-width: 800px) {
+    .reaction {
         letter-spacing: 1px;
         margin-left: 0px;
         color: #8a8a8a;
     }
-    
+
 }

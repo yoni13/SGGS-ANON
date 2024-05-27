@@ -1,6 +1,6 @@
 HideBtn = document.getElementsByClassName('HideBtn')[0];
 
-HideBtn.onclick = function() {
+HideBtn.onclick = function () {
     fetch(location.href, {
         method: 'POST',
         headers: {
@@ -9,9 +9,9 @@ HideBtn.onclick = function() {
         body: JSON.stringify({
             'action': 'hide'
         })
-    }).then(function(response) {
+    }).then(function (response) {
         return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
         if (data['err'] == 0) {
             alert('修改成功');
             location.reload();
@@ -24,7 +24,7 @@ HideBtn.onclick = function() {
 
 markBtn = document.getElementsByClassName('MarkMightFakeBtn')[0];
 
-markBtn.onclick = function() {
+markBtn.onclick = function () {
     fetch(location.href, {
         method: 'POST',
         headers: {
@@ -33,9 +33,9 @@ markBtn.onclick = function() {
         body: JSON.stringify({
             'action': 'mark'
         })
-    }).then(function(response) {
+    }).then(function (response) {
         return response.json();
-    }).then(function(data) {
+    }).then(function (data) {
         if (data['err'] == 0) {
             alert('修改成功');
             location.reload();

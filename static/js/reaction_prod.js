@@ -1,15 +1,15 @@
 reaction_emotes = document.getElementsByClassName('reaction_emotes');
 
 for (var i = 0; i < reaction_emotes.length; i++) {
-    reaction_emotes[i].addEventListener('mouseover', function() {
+    reaction_emotes[i].addEventListener('mouseover', function () {
         this.style.cursor = 'pointer';
         this.style.fontSize = '50px';
     })
 
-    reaction_emotes[i].addEventListener('mouseout', function() {
+    reaction_emotes[i].addEventListener('mouseout', function () {
         this.style.fontSize = '30px';
     })
-    reaction_emotes[i].addEventListener('click', function() {
+    reaction_emotes[i].addEventListener('click', function () {
         fetch('/api/v1/reaction', {
             method: 'POST',
             headers: {
@@ -20,18 +20,18 @@ for (var i = 0; i < reaction_emotes.length; i++) {
                 post_id: this.parentElement.id
             })
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data['err'] === 1) {
-                alert(data['desc']);
-                return;
-            }
-            this.parentElement.children[0].innerHTML = '👍' + data['reaction'][0]
-            this.parentElement.children[1].innerHTML = '👎' + data['reaction'][1]
-            this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
-        })
-        .catch((error) => {
-            alert('Error:', error);
-        });
-    })}
-    
+            .then((response) => response.json())
+            .then((data) => {
+                if (data['err'] === 1) {
+                    alert(data['desc']);
+                    return;
+                }
+                this.parentElement.children[0].innerHTML = '👍' + data['reaction'][0]
+                this.parentElement.children[1].innerHTML = '👎' + data['reaction'][1]
+                this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
+            })
+            .catch((error) => {
+                alert('Error:', error);
+            });
+    })
+}

@@ -56,11 +56,5 @@ app.register_blueprint(static_files.static_files)
 app.register_blueprint(frontend.frontend)
 
 
-@app.route('/reaction_test')
-def reaction_test():
-    return render_template('test.html')
-
-
-
 if __name__ == "__main__":
     app.run(port=8080, debug=True, host='0.0.0.0')
