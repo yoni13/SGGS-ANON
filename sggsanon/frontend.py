@@ -189,7 +189,11 @@ def messages_replys():
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden")))
+            like_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'like'})
+            dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
+            laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count,document.get("post_id")))
         if resp_dict == []:
             abort(404)
 

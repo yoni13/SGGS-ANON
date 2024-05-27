@@ -26,6 +26,11 @@
 {% if m[4] %}
     <p class="reply">此回覆已被管理員隱藏</p>
 {% endif %}
+<div class="reaction" id="{{ m[8] }}">
+    <a class="reaction_emotes" id="like">👍{{ m[5] }}</a>
+    <a class="reaction_emotes" id="dislike">👎{{ m[6] }}</a>
+    <a class="reaction_emotes" id="laugh">🤣{{ m[7] }}</a>
+</div>
         </div>
         {% endfor %}
 <hr>
@@ -62,4 +67,5 @@
 
 
 </body>
+<script src="/static/js/reaction_prod.js"></script>
 </html>
