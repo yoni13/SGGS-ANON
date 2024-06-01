@@ -19,6 +19,7 @@
     {% if session.get("user_info") %}
     <div id="mb_form">
         <form action="/message_board" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <table>
                 <tr>
                     <td>留言：</td>
@@ -55,7 +56,8 @@
                 {% endif %}
             </a>
 
-            <div class="reaction" id="{{ m[3] }}">
+            <div class="reaction" id="{{ m[3] }}" >
+                <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
                 <a class="reaction_emotes" id="like">👍{{ m[7] }}</a>
                 <a class="reaction_emotes" id="dislike">👎{{ m[8] }}</a>
                 <a class="reaction_emotes" id="laugh">🤣{{ m[9] }}</a>

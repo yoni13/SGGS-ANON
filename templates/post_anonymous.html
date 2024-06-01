@@ -25,6 +25,7 @@
 
     <div id="mb_form">
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <table>
                 <tr>
                     <td>留言：</td>

@@ -13,12 +13,13 @@ for (var i = 0; i < reaction_emotes.length; i++) {
         fetch('/api/v1/reaction', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': this.parentElement.children[0].value
             },
             body: JSON.stringify({
                 reaction: this.id,
                 post_id: this.parentElement.id
-            })
+            }),
         })
             .then((response) => response.json())
             .then((data) => {
@@ -26,12 +27,12 @@ for (var i = 0; i < reaction_emotes.length; i++) {
                     alert(data['desc']);
                     return;
                 }
-                this.parentElement.children[0].innerHTML = '👍' + data['reaction'][0]
-                this.parentElement.children[1].innerHTML = '👎' + data['reaction'][1]
-                this.parentElement.children[2].innerHTML = '🤣' + data['reaction'][2]
+                this.parentElement.children[1].innerHTML = '👍' + data['reaction'][0]
+                this.parentElement.children[2].innerHTML = '👎' + data['reaction'][1]
+                this.parentElement.children[3].innerHTML = '🤣' + data['reaction'][2]
             })
             .catch((error) => {
-                alert('Error:', error);
+                alert(`Error:請稍後再試一次`);
             });
     })
 }

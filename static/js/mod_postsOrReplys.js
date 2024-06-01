@@ -4,7 +4,8 @@ HideBtn.onclick = function () {
     fetch(location.href, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-csrf-token': document.getElementById('csrf_token').value
         },
         body: JSON.stringify({
             'action': 'hide'
@@ -28,7 +29,8 @@ markBtn.onclick = function () {
     fetch(location.href, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-csrf-token': document.getElementById('csrf_token').value
         },
         body: JSON.stringify({
             'action': 'mark'

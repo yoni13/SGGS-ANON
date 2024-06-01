@@ -5,7 +5,8 @@ send_email_code.onclick = function () {
     fetch('/api/v1/send_email_code', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-csrf-token': document.getElementById('csrf_token').value
         },
         body: JSON.stringify({
             'email': document.getElementById('email').value,

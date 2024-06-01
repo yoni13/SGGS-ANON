@@ -3,8 +3,7 @@ import time
 import re
 import hashlib
 import datetime
-from app import get_mail, limiter
-from app import db
+from app import get_mail, limiter, db
 from markupsafe import escape
 import little_conponment
 

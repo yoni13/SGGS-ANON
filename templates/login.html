@@ -16,6 +16,7 @@
     </div>
     <div id="reg_form">
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <table>
                 <tr>
                     <td>使用者名稱：</td>

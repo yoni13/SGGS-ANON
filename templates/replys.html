@@ -31,6 +31,7 @@
         <p class="reply">此回覆已被管理員隱藏</p>
         {% endif %}
         <div class="reaction" id="{{ m[8] }}">
+            <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
             <a class="reaction_emotes" id="like">👍{{ m[5] }}</a>
             <a class="reaction_emotes" id="dislike">👎{{ m[6] }}</a>
             <a class="reaction_emotes" id="laugh">🤣{{ m[7] }}</a>
@@ -59,6 +60,7 @@
     {% if session.get("user_info") %}
     <div id="mb_form">
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <table>
                 <tr>
                     <td>回覆：</td>

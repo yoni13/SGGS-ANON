@@ -16,6 +16,7 @@
     </div>
     <div id="reg_form">
         <form action="/reg" method="POST">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
             <table>
 
                 <tr>

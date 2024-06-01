@@ -75,7 +75,8 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                                 fetch('/api/v1/reaction', {
                                     method: 'POST',
                                     headers: {
-                                        'Content-Type': 'application/json'
+                                        'Content-Type': 'application/json',
+                                        'x-csrf-token': document.getElementById('csrf_token').value
                                     },
                                     body: JSON.stringify({
                                         reaction: this.id,

@@ -28,6 +28,7 @@
         {% endfor %}
         <hr>
         <br>
+        <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
         <a href="#" class="MarkMightFakeBtn">Mark/Unmark</a><a href="#" class="HideBtn">Hide/Unhide</a>
         <br><br>
         <hr>
