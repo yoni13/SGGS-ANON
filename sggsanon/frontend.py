@@ -14,6 +14,7 @@ limiter = limiter
 frontend = Blueprint('frontend', __name__)
 
 @frontend.route("/reg", methods=["GET", "POST"])
+@limiter.limit("5 per minute",methods=["POST"])
 def reg_handle():
     if request.method == "GET":
         if session.get("user_info"):
@@ -87,6 +88,7 @@ def logout_handle():
 
 
 @frontend.route("/post_anonymous", methods=["GET", "POST"])
+@limiter.limit("1 per hour",methods=["POST"])
 def post_anonymous_handle():
     if request.method == "GET":
         return render_template("post_anonymous.html")
@@ -115,6 +117,7 @@ def post_anonymous_handle():
             return '<script>alert("留言不能為空！");history.back();</script>'
 
 @frontend.route("/message_board", methods=["GET", "POST"])
+@limiter.limit("1 per minute",methods=["POST"])
 def message_board_handle():
     if request.method == "GET":
         messages = db.mb_message.find().sort({'_id':-1}).limit(10)
@@ -166,6 +169,7 @@ def message_board_handle():
 
 
 @frontend.route('/messages_replys', methods=['GET', 'POST'])
+@limiter.limit("5 per minute",methods=["POST"])
 def messages_replys():
     if request.method == "GET":
         post_id = request.args.get("post_id")
