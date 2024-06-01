@@ -1,65 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>匿名曙光留言板</title>
+    <title>{{ title }} || 匿名曙光留言板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/static/css/style.css" />
 </head>
+
 <body>
-<div class="navbar">
-  <a href="/message_board"><img src="/static/img/logo.png" alt="SGGS logo" >
-  <h1>匿名留言板</h1></a>
-</div>
+    <div class="navbar">
+        <a href="/message_board"><img src="/static/img/logo.png" alt="SGGS logo">
+            <h1>匿名留言板</h1>
+        </a>
+    </div>
 
-        {% for m in messages %}
-        <div class="message">
-            <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
+    {% for m in messages %}
+    <div class="message">
+        <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
             <br><br>
-            <span class="pub_time">{{ m[1] }}</span></div>
-{% autoescape false %}
-            <p class="content">{{ m[2] }}</p>
-{% endautoescape %}
-{% if m[3] %}
-    <p class="reply">管理員:此留言有部分可能具有爭議</p>
-{% endif %}
-{% if m[4] %}
-    <p class="reply">此回覆已被管理員隱藏</p>
-{% endif %}
+            <span class="pub_time">{{ m[1] }}</span>
         </div>
-        {% endfor %}
-<hr>
-{% for m in replys %}
-        <div class="message">
-            <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
+        {% autoescape false %}
+        <p class="content">{{ m[2] }}</p>
+        {% endautoescape %}
+        {% if m[3] %}
+        <p class="reply">管理員:此留言有部分可能具有爭議</p>
+        {% endif %}
+        {% if m[4] %}
+        <p class="reply">此回覆已被管理員隱藏</p>
+        {% endif %}
+        <div class="reaction" id="{{ m[8] }}">
+            <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+            <a class="reaction_emotes" id="like">👍{{ m[5] }}</a>
+            <a class="reaction_emotes" id="dislike">👎{{ m[6] }}</a>
+            <a class="reaction_emotes" id="laugh">🤣{{ m[7] }}</a>
+        </div>
+    </div>
+    {% endfor %}
+    <hr>
+    {% for m in replys %}
+    <div class="message">
+        <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
             <br><br>
-            <span class="pub_time">{{ m[1] }}</span></div>
-{% autoescape false %}
-            <p class="content">{{ m[2] }}</p>
-{% endautoescape %}
-    {% if m[3] %}
-    <p class="reply">管理員:此留言有部分可能具有爭議</p>
-    {% endif %}
-    {% if m[4] %}
-    <p class="reply">此回覆已被管理員隱藏</p>
-    {% endif %}
+            <span class="pub_time">{{ m[1] }}</span>
         </div>
-        {% endfor %}
+        {% autoescape false %}
+        <p class="content">{{ m[2] }}</p>
+        {% endautoescape %}
+        {% if m[3] %}
+        <p class="reply">管理員:此留言有部分可能具有爭議</p>
+        {% endif %}
+        {% if m[4] %}
+        <p class="reply">此回覆已被管理員隱藏</p>
+        {% endif %}
+    </div>
+    {% endfor %}
 
-{% if session.get("user_info") %}
-<div id="mb_form">
-    <form method="POST">
-        <table>
-            <tr><td>回覆：</td><td><textarea id="content" name="content" placeholder="請輸入回覆內容" required></textarea></td></tr>
-            <tr><td></td><td><button type="submit">送出</button></td></tr>
-        </table>
-    </form>
-</div>
-{% else %}
+    {% if session.get("user_info") %}
+    <div id="mb_form">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <table>
+                <tr>
+                    <td>回覆：</td>
+                    <td><textarea id="content" name="content" placeholder="請輸入回覆內容" required></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit">送出</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    {% else %}
 
-<p id="wanttologin">想回覆?<a href="/login">登入</a>或<a href="/reg">註冊</a>！</p>
-{% endif %}
+    <p id="wanttologin">想回覆?<a href="/login">登入</a>或<a href="/reg">註冊</a>！</p>
+    {% endif %}
 
 
 </body>
+<script src="/static/js/reaction_prod.js"></script>
+
 </html>

@@ -3,8 +3,7 @@ import time
 import re
 import hashlib
 import datetime
-from app import get_mail, limiter
-from app import db
+from app import get_mail, limiter, db
 from markupsafe import escape
 import little_conponment
 
@@ -13,11 +12,6 @@ limiter = limiter
 
 
 frontend = Blueprint('frontend', __name__)
-
-@frontend.route("/")
-def index():
-    return redirect('/message_board')
-
 
 @frontend.route("/reg", methods=["GET", "POST"])
 def reg_handle():
@@ -135,8 +129,12 @@ def message_board_handle():
 
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
+            
+            like_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'like'})
+            dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
+            laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")}), document.get("might_fake"),document.get("hidden")))
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("post_id"), db.mb_replys.count_documents({"post_id": document.get("post_id")}), document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count))
         resp_messages = resp_dict
 
         return render_template("message_board.html", messages=resp_messages)
@@ -185,7 +183,16 @@ def messages_replys():
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
 
-            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden")))
+            like_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'like'})
+            dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
+            laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
+
+            if len(document.get("content")) > 20:
+                title = document.get('uname') + ' 說:' + document.get("content")[:20] + '...'
+            else:
+                title = document.get('uname') + ' 說:' + document.get("content")
+
+            resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count,document.get("post_id"),title))
         if resp_dict == []:
             abort(404)
 
@@ -207,7 +214,7 @@ def messages_replys():
             replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake"), document.get("hidden")))
         resp_replys = replys_dict
 
-        return render_template("replys.html", messages=resp_messages,replys=resp_replys)
+        return render_template("replys.html", messages=resp_messages,replys=resp_replys,title=title)
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
@@ -266,11 +273,8 @@ def login_handle():
             })
             if dbres:
                 session["user_info"] = {
-                    "uid": dbres.get("uid"),
                     "uname": dbres.get("uname"),
                     "email": dbres.get("email"),
-                    "reg_time": dbres.get("reg_time"),
-                    "last_login_time": dbres.get("last_login_time"),
                     "priv": dbres.get("priv"),
                     "state": dbres.get("state"),
                     "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -289,3 +293,8 @@ def login_handle():
                 return redirect('/mod')
             
         return redirect('/message_board')
+
+
+@frontend.route('/')
+def test():
+    return render_template('root.html')

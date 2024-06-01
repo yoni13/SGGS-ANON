@@ -1,60 +1,82 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>匿名曙光留言板</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/static/css/style.css" />
-    <link rel="canonical" href="https://nicewhite.eu.org/message_board"/>
+    <link rel="canonical" href="https://nicewhite.eu.org/message_board" />
 </head>
-<body>
-<div class="navbar">
-  <a href="/"><img src="/static/img/logo.png" alt="SGGS logo" >
-  <h1>匿名留言板</h1></a>
-</div>
 
-{% if session.get("user_info") %}
-        <div id="mb_form">
-            <form action="/message_board" method="POST">
-                <table>
-                    <tr><td>留言：</td><td><textarea id="content" name="content" placeholder="請輸入留言內容" required></textarea></td></tr>
-                    <tr><td></td><td><button type="submit">送出</button>&emsp;<a href="/post_anonymous">前往匿名區</a></td></tr>
-                </table>
-            </form>
-        </div>
-        {% else %}
-        <p id="wanttologin">想留言?<a href="/login">登入</a>或<a href="/reg">註冊</a>！或是你可以<a href="/post_anonymous">匿名留言</a>！
-        </p>
-        {% endif %}
-        <hr>
-        <div id="message_area">
+<body>
+    <div class="navbar">
+        <a href="/message_board"><img src="/static/img/logo.png" alt="SGGS logo">
+            <h1>匿名留言板</h1>
+        </a>
+    </div>
+
+    {% if session.get("user_info") %}
+    <div id="mb_form">
+        <form action="/message_board" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <table>
+                <tr>
+                    <td>留言：</td>
+                    <td><textarea id="content" name="content" placeholder="請輸入留言內容" required></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button type="submit">送出</button>&emsp;<a href="/post_anonymous">前往匿名區</a></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    {% else %}
+    <p id="wanttologin">想留言?<a href="/login">登入</a>或<a href="/reg">註冊</a>！或是你可以<a href="/post_anonymous">匿名留言</a>！
+    </p>
+    {% endif %}
+    <hr>
+    <div id="message_area">
         {% for m in messages %}
-        
+
         <div class="message">
             <a class="messagelink" href="messages_replys?post_id={{ m[3] }}">
-            <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
-            <br><br>
-            <span class="pub_time">{{ m[1] }}</span></div>
-            {% autoescape false %} <p class="content">{{ m[2] }}</p>{% endautoescape %}
-            <p class="reply">回覆數:{{ m[4] }}</p>
-            {% if m[5] %}
-            <p class="reply">管理員:此留言有部分可能具有爭議</p>
-            {% endif %}
-            {% if m[6] %}
-            <p class="reply">此回覆已被管理員隱藏</p>
-            {% endif %}
-        </a>
+                <div><img src="/static/img/default.png" class="profileimg"><span class="uname">{{ m[0] }}</span>
+                    <br><br>
+                    <span class="pub_time">{{ m[1] }}</span>
+                </div>
+                {% autoescape false %} <p class="content">{{ m[2] }}</p>{% endautoescape %}
+                <p class="reply">回覆數:{{ m[4] }}</p>
+                {% if m[5] %}
+                <p class="reply">管理員:此留言有部分可能具有爭議</p>
+                {% endif %}
+                {% if m[6] %}
+                <p class="reply">此回覆已被管理員隱藏</p>
+                {% endif %}
+            </a>
+
+            <div class="reaction" id="{{ m[3] }}" >
+                <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+                <a class="reaction_emotes" id="like">👍{{ m[7] }}</a>
+                <a class="reaction_emotes" id="dislike">👎{{ m[8] }}</a>
+                <a class="reaction_emotes" id="laugh">🤣{{ m[9] }}</a>
+            </div>
+
+
         </div>
-            
+
         {% endfor %}
     </div>
-<div id="loadmore">
-<!-- Let me load for a while -->
-<div class="lds-hourglass"></div>
-<p id="loading_text">載入中...</p>
+    <div id="loadmore">
+        <!-- Let me load for a while -->
+        <div class="lds-hourglass"></div>
+        <p id="loading_text">載入中...</p>
 
-</div>
+    </div>
 
 </body>
 <script src="/static/js/mb.js"></script>
+<script src="/static/js/reaction_prod.js"></script>
+
 </html>

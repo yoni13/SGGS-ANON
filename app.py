@@ -5,10 +5,13 @@ from pymongo import MongoClient
 import os
 from flask_limiter import Limiter
 from flask_cors import CORS
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
 app.secret_key = os.environ['app_secret_key']
+app.config['CSRF_SECRET_KEY'] = os.urandom(24)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+csrf = CSRFProtect(app)
 
 def get_remote_address():
     return request.headers.get('cf-connecting-ip') if request.headers.get('cf-connecting-ip') else request.remote_addr
@@ -40,11 +43,6 @@ app.config.update(
 mail = Mail(app)
 
 
-def get_limiter():
-    return limiter
-
-def get_db():
-    return db
 
 def get_mail():
     return mail
@@ -54,7 +52,6 @@ app.register_blueprint(api.api)
 app.register_blueprint(moderation.mod)
 app.register_blueprint(static_files.static_files)
 app.register_blueprint(frontend.frontend)
-
 
 
 if __name__ == "__main__":
