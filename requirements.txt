@@ -10,3 +10,4 @@ flask-mail
 Flask-Limiter
 Flask-Cors
 flask-wtf
+Pillow

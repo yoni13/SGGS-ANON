@@ -218,7 +218,7 @@ def messages_replys():
             replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake"), document.get("hidden")))
         resp_replys = replys_dict
 
-        return render_template("replys.html", messages=resp_messages,replys=resp_replys,title=title)
+        return render_template("replys.html", messages=resp_messages,replys=resp_replys,title=title,post_id=post_id)
     elif request.method == "POST":
         user_info = session.get("user_info")
         if not user_info:
