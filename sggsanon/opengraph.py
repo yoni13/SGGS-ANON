@@ -68,3 +68,22 @@ def og():
     img.save(current_path+"/tmp/"+imgname)
     return send_from_directory(current_path+"/tmp/", imgname)
 
+@opengraph.route('/oembedapi')
+def oembedapi():
+    if not request.args.get('post_id'):
+        abort(400)
+    post = db.mb_message.find_one({"post_id": request.args.get('post_id')})
+
+    if len(post['content']) > 20:
+        title = post['uname'] + ' 說:' + post['content'][:20] + '...'
+    else:
+        title = post['uname'] + ' 說:' + post['content']
+    
+    json_template = {
+    "author_name":  title,
+    "author_url": "https://"+request.host,
+    "provider_name": post['uname'] ,
+    "provider_url": "https://"+request.host+"/opengraph?post_id="+request.args.get('post_id'),
+    "type": "photo"
+    }
+    return json_template
