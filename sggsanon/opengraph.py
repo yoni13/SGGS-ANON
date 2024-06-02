@@ -17,8 +17,6 @@ def og():
     if not db.mb_message.find_one({"post_id": post_id}):
         abort(404)
 
-    if not os.path.isdir("tmp"):
-        os.mkdir("tmp")
 
     if os.path.isfile("tmp/"+post_id+".png"):
         return send_from_directory("tmp", post_id+".png")

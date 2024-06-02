@@ -42,7 +42,8 @@ app.config.update(
 )
 mail = Mail(app)
 
-
+if not os.path.isdir("tmp"):
+    os.mkdir("tmp")
 
 def get_mail():
     return mail
