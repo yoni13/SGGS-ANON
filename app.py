@@ -32,12 +32,12 @@ db = client["message"]
 
 app.config.update(
     DEBUG=False,
-    MAIL_SERVER='smtp-relay.brevo.com',
+    MAIL_SERVER='',
     MAIL_PORT=587,
     MAIL_USE_SSL=False,
-    MAIL_DEFAULT_SENDER=('admin', 'admin@nicewhite.eu.org'),
+    MAIL_DEFAULT_SENDER=('admin', ''),
     MAIL_MAX_EMAILS=10,
-    MAIL_USERNAME='6c6343001@smtp-brevo.com',
+    MAIL_USERNAME='',
     MAIL_PASSWORD=os.environ['email_key']
 )
 mail = Mail(app)
