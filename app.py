@@ -32,12 +32,12 @@ db = client["message"]
 
 app.config.update(
     DEBUG=False,
-    MAIL_SERVER='',
+    MAIL_SERVER=os.environ['MAIL_SERVER'],
     MAIL_PORT=587,
     MAIL_USE_SSL=False,
-    MAIL_DEFAULT_SENDER=('admin', ''),
+    MAIL_DEFAULT_SENDER=('admin', os.environ['MAIL_DEFAULT_SENDER']),
     MAIL_MAX_EMAILS=10,
-    MAIL_USERNAME='',
+    MAIL_USERNAME=os.environ['MAIL_USERNAME'],
     MAIL_PASSWORD=os.environ['email_key']
 )
 mail = Mail(app)
