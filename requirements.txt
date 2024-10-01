@@ -12,3 +12,5 @@ Flask-Cors
 flask-wtf
 Pillow
 python-crontab
+markdown
+beautifulsoup4
