@@ -178,6 +178,11 @@ hr {
     word-wrap: break-word;
 }
 
+.message .content a{
+    color: #ffffff;
+    text-decoration: underline;
+}
+
 .message .reply {
     bottom: 12px;
     font-family: 'Inter', sans-serif;
