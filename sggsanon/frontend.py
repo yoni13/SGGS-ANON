@@ -6,6 +6,8 @@ import datetime
 from app import get_mail, limiter, db
 from markupsafe import escape
 import little_conponment
+import markdown
+from bs4 import BeautifulSoup
 
 mail = get_mail()
 limiter = limiter
@@ -88,7 +90,7 @@ def logout_handle():
 
 
 @frontend.route("/post_anonymous", methods=["GET", "POST"])
-@limiter.limit("1 per hour",methods=["POST"])
+@limiter.limit("2 per hour",methods=["POST"])
 def post_anonymous_handle():
     if request.method == "GET":
         return render_template("post_anonymous.html")
@@ -125,10 +127,18 @@ def message_board_handle():
         resp_dict = []
 
         for document in messages:
-            if '\n' in document.get("content"):
-                content = document.get("content").replace("\n","<br>")
-            else:
-                content = document.get("content")
+            content = document.get("content")
+            content = markdown.markdown(content)
+
+            soup = BeautifulSoup(content, 'html.parser')
+            ps = soup.find_all('p')
+            for p in ps:
+                if '\n' in p.string:
+                    p.string = p.string.replace("\n","<br>")
+
+            content = str(soup)
+            if escape('<br>') in content:
+                content = content.replace(escape('<br>'),"<br>")
 
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
@@ -179,10 +189,18 @@ def messages_replys():
         resp_dict = []
 
         for document in messages:
-            if '\n' in document.get("content"):
-                content = document.get("content").replace("\n","<br>")
-            else:
-                content = document.get("content")
+            content = document.get("content")
+            content = markdown.markdown(content)
+
+            soup = BeautifulSoup(content, 'html.parser')
+            ps = soup.find_all('p')
+            for p in ps:
+                if '\n' in p.string:
+                    p.string = p.string.replace("\n","<br>")
+
+            content = str(soup)
+            if escape('<br>') in content:
+                content = content.replace(escape('<br>'),"<br>")
             
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
@@ -206,11 +224,18 @@ def messages_replys():
         replys_dict = []
 
         for document in replys:
+            content = document.get("content")
+            content = markdown.markdown(content)
 
-            if '\n' in document.get("content"):
-                content = document.get("content").replace("\n","<br>")
-            else:
-                content = document.get("content")
+            soup = BeautifulSoup(content, 'html.parser')
+            ps = soup.find_all('p')
+            for p in ps:
+                if '\n' in p.string:
+                    p.string = p.string.replace("\n","<br>")
+
+            content = str(soup)
+            if escape('<br>') in content:
+                content = content.replace(escape('<br>'),"<br>")
 
             if document.get("hidden") == True:
                 content = "此回覆已被隱藏"
