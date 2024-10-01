@@ -209,10 +209,15 @@ def messages_replys():
             dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
             laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
 
-            if len(document.get("content")) > 20:
-                title = document.get('uname') + ' 說:' + document.get("content")[:20] + '...'
+            markdown_html_text = BeautifulSoup(markdown.markdown(document.get('content')), "html.parser").getText()
+            
+            if len(markdown_html_text) > 20:
+                title = document.get('uname') + ' 說:' + markdown_html_text[:20] + '...'
             else:
-                title = document.get('uname') + ' 說:' + document.get("content")
+                title = document.get('uname') + ' 說:' + markdown_html_text
+
+            if document.get('hidden'):
+                title = '此留言已被隱藏'
 
             resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count,document.get("post_id"),title))
         if resp_dict == []:
