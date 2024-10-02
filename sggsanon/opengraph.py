@@ -1,8 +1,8 @@
 from flask import Blueprint, request, abort, send_from_directory
 from PIL import Image, ImageDraw, ImageFont
 import os
-import markdown
 from bs4 import BeautifulSoup
+import little_conponment
 
 from app import db, limiter
 
@@ -28,13 +28,12 @@ def og():
     uname = post['uname']
     pub_time = post['pub_time']
 
-    if len(post['content']) > 30:
-        content = post['content'][:30] + ' ...'
+    content = BeautifulSoup(little_conponment.markdown_to_html_secure(post['content']), "html.parser").getText()
+
+    if len(content) > 30:
+        content = content[:30] + ' ...'
     else:
-        content = post['content']
-
-    content = BeautifulSoup(markdown.markdown(content), "html.parser").getText()
-
+        content = content
     if post['hidden']:
         content = '此留言已被隱藏'
     like_count = db.mb_reaction.count_documents({'post_id': post_id, 'reaction': 'like'})
@@ -75,9 +74,9 @@ def oembedapi():
         abort(400)
     post = db.mb_message.find_one({"post_id": request.args.get('post_id')})
 
-    content = BeautifulSoup(markdown.markdown(post['content']), "html.parser").getText()
+    content = BeautifulSoup(little_conponment.markdown_to_html_secure(post['content']), "html.parser").getText()
 
-    if len(post['content']) > 20:
+    if len(content) > 20:
         title = post['uname'] + ' 說:' + content[:20] + '...'
     else:
         title = post['uname'] + ' 說:' + content
