@@ -5,7 +5,7 @@ for (var i = 0; i < reaction_emotes.length; i++) {
         this.style.cursor = 'pointer';
         // if screen < 700px, change font size to 36
         if (window.innerWidth < 700) {
-            this.style.fontSize = '36px';
+            this.style.fontSize = '35px';
         }
         else { this.style.fontSize = '50px'; }
     })
