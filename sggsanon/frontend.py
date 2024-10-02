@@ -271,9 +271,6 @@ def messages_replys():
             soup = BeautifulSoup(content, 'html.parser')
             ps = soup.find_all('p')
             for p in ps:
-                if '\n' in p.string:
-                    p.string = p.string.replace("\n","<br>")
-
                 try:
                     if '\n' in p.string:
                         p.string = p.string.replace("\n","<br>")
