@@ -36,10 +36,12 @@ def markdown_to_html_secure(markdown_text,img_to_text=False):
                     link.attrs['target'] = '_blank'
                     link.attrs['rel'] = 'noopener noreferrer'
 
-    if img_to_text:
+
         imgs = soup.find_all('img')
         for img in imgs:
-            img.string = '(圖片)'
+            img.attrs['src'] = 'https://imgpreview-proxy.nicewhite.xyz/' + img.attrs['src']
+            if img_to_text:
+                img.string = '(圖片)'
 
     content = str(soup)
     if escape('<br>') in content:
