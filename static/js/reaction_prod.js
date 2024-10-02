@@ -35,7 +35,6 @@ for (var i = 0; i < reaction_emotes.length; i++) {
                 this.parentElement.children[1].innerHTML = '👍' + data['reaction'][0]
                 this.parentElement.children[2].innerHTML = '👎' + data['reaction'][1]
                 this.parentElement.children[3].innerHTML = '🤣' + data['reaction'][2]
-                this.style.fontSize = '30px';
             })
             .catch((error) => {
                 alert(`Error:請稍後再試一次`);
