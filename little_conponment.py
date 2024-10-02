@@ -39,7 +39,7 @@ def markdown_to_html_secure(markdown_text,img_to_text=False):
     if img_to_text:
         imgs = soup.find_all('img')
         for img in imgs:
-            img.text = '(圖片)'
+            img.string = '(圖片)'
 
     content = str(soup)
     if escape('<br>') in content:
