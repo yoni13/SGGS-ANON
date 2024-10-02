@@ -28,13 +28,13 @@ document.getElementsByTagName('body')[0].onscroll = () => {
                 for (let i = 0; i < data.length; i++) {
                     let mb = document.createElement('div');
                     meselement = `
-                <div class="message">
-                <a class="messagelink" href="${Hereurl}${data[i].post_id}">
-                <div><img src="/static/img/default.png" class="profileimg"><span class="uname">${data[i].uname}</span>
-                <br><br>
-                <span class="pub_time">${data[i].pub_time}</span></div>
-                <p class="content">${data[i].content}</p>
-                <p class="reply">回覆數:${data[i].replys_count}</p>`;
+                        <div class="message">
+                        <a class="messagelink" href="${Hereurl}${data[i].post_id}">
+                        <div><img src="/static/img/default.png" class="profileimg"><span class="uname">${data[i].uname}</span>
+                        <br><br>
+                        <span class="pub_time">${data[i].pub_time}</span></div>
+                        <div class="content">${data[i].content}</div>
+                        <p class="reply">回覆數:${data[i].replys_count}</p>`;
                     if (data[i].might_fake === true) {
                         meselement += `<p class="reply">管理員:此留言有部分可能具有爭議</p>`;
                     }

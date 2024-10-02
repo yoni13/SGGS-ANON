@@ -6,6 +6,7 @@ import re
 from app import limiter
 from flask_mail import Message
 from app import mail
+import little_conponment
 
 api = Blueprint('api', __name__)
 
@@ -48,7 +49,7 @@ def mb_board():
         if data['hidden']:
             content = '此留言已被隱藏'
         else:
-            content = data['content']
+            content = little_conponment.markdown_to_html_secure(data['content'])
         
         info = {'uname': data['uname'], 'content': content, 'pub_time': data['pub_time'], 'post_id': data['post_id'], 'replys_count': replys_count,'might_fake': data['might_fake'],'hidden': data['hidden'],'like':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "like"}),'dislike':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "dislike"}),'laugh':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "laugh"}),'login':logined}
         res.append(info)
@@ -87,9 +88,15 @@ def mb_board_post():
                {'uname': data['uname'], 'content': data['content'], 'pub_time': data['pub_time'], 'post_id': data['post_id']}
                 }
         replysres = []
+        
         replys = db.mb_replys.find({'post_id': post_id}).limit(limit).skip((page-1)*limit)
         for reply in replys:
-            replydata = {'uname': reply['uname'], 'content': reply['content'], 'pub_time': reply['pub_time']}
+            if reply['hidden']:
+                content = '此留言已被隱藏'
+            else:
+                content = little_conponment.markdown_to_html_secure(reply['content'])
+
+            replydata = {'uname': reply['uname'], 'content': content, 'pub_time': reply['pub_time']}
             replysres.append(replydata)
         res['replys'] = replysres
         if request.args.get('reverse') == '1':
