@@ -4,7 +4,7 @@ for (var i = 0; i < reaction_emotes.length; i++) {
     reaction_emotes[i].addEventListener('mouseover', function () {
         this.style.cursor = 'pointer';
         // if screen < 700px, change font size to 36
-        if (window.innerWidth < 700) {
+        if (window.innerHeight < 400) {
             this.style.fontSize = '35px';
         }
         else { this.style.fontSize = '50px'; }
