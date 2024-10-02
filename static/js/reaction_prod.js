@@ -6,9 +6,8 @@ for (var i = 0; i < reaction_emotes.length; i++) {
         // if screen < 700px, change font size to 36
         if (window.innerWidth < 700) {
             this.style.fontSize = '36px';
-            return;
         }
-        else { this.style.fontSize = '50px'; return; }
+        else { this.style.fontSize = '50px'; }
     })
 
     reaction_emotes[i].addEventListener('mouseout', function () {
