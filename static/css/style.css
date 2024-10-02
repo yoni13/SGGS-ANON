@@ -447,10 +447,10 @@ hr {
     letter-spacing: 10px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 800px) { /* Mobile */
     .reaction {
         letter-spacing: 1px;
-        margin-left: 0px;
+        margin-left: 15px;
     }
 
 }
