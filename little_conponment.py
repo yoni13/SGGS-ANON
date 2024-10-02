@@ -3,7 +3,7 @@ import string
 import markdown
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from jinja2 import escape
+from markupsafe import escape
 
 def generate_random_string(length):
     letters = string.ascii_letters
