@@ -3,7 +3,12 @@ reaction_emotes = document.getElementsByClassName('reaction_emotes');
 for (var i = 0; i < reaction_emotes.length; i++) {
     reaction_emotes[i].addEventListener('mouseover', function () {
         this.style.cursor = 'pointer';
-        this.style.fontSize = '50px';
+        // if screen < 700px, change font size to 36
+        if (window.innerWidth < 700) {
+            this.style.fontSize = '36px';
+            return;
+        }
+        else { this.style.fontSize = '50px'; }
     })
 
     reaction_emotes[i].addEventListener('mouseout', function () {
