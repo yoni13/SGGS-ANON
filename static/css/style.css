@@ -178,33 +178,38 @@ hr {
     word-wrap: break-word;
 }
 
-.message .content a{
+.message .content a {
     color: #ffffff;
     text-decoration: underline;
 }
 
-.message .content a:hover{
+.message .content a:hover {
     color: #afafaf;
 }
 
 
 @media screen and (max-width: 800px) {
-    .message .content img{
+    .message .content img {
         max-width: 100%;
         max-height: 100%;
         border-radius: 57px;
+    }
+
+    .content {
+        padding-right: 20px;
     }
 }
 
 
 @media screen and (min-width: 800px) {
-    .message .content img{
+    .message .content img {
         max-width: 50%;
         max-height: 50%;
         border-radius: 57px;
     }
-    
+
 }
+
 .message .reply {
     bottom: 12px;
     font-family: 'Inter', sans-serif;
@@ -215,21 +220,29 @@ hr {
 
 
 @media screen and (max-width: 800px) {
-    .message .reply img{
+
+    /* Mobile */
+    .message .reply img {
         max-width: 100%;
         max-height: 100%;
         border-radius: 57px;
+    }
+
+    .content {
+        padding-right: 20px;
     }
 }
 
 
 @media screen and (min-width: 800px) {
-    .message .reply img{
+
+    /* Desktop */
+    .message .reply img {
         max-width: 50%;
         max-height: 50%;
         border-radius: 57px;
     }
-    
+
 }
 
 .message a {
@@ -443,7 +456,7 @@ hr {
 }
 
 
-#root{
+#root {
     margin-top: 40px;
     margin-left: 20px;
     margin-right: 20px;
@@ -456,19 +469,19 @@ hr {
     border-radius: 57px;
 }
 
-#root img{
-    float:left;
-    margin-right:5px;
+#root img {
+    float: left;
+    margin-right: 5px;
 }
 
-#root h1{
-    display:inline;
+#root h1 {
+    display: inline;
     font-family: 'Orienta', sans-serif;
     color: #FFFFFF;
     font-size: 30px;
 }
 
-#root p{
+#root p {
     font-family: 'Inter', sans-serif;
     color: #afafaf;
     font-size: 20px;
