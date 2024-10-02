@@ -10,7 +10,7 @@ def generate_random_string(length):
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
 
-def markdown_to_html_secure(markdown_text):
+def markdown_to_html_secure(markdown_text,img_to_text=False):
     content = markdown.markdown(markdown_text)
 
     soup = BeautifulSoup(content, 'html.parser')
@@ -35,6 +35,11 @@ def markdown_to_html_secure(markdown_text):
                 else:
                     link.attrs['target'] = '_blank'
                     link.attrs['rel'] = 'noopener noreferrer'
+
+    if img_to_text:
+        imgs = soup.find_all('img')
+        for img in imgs:
+            img.text = '(圖片)'
 
     content = str(soup)
     if escape('<br>') in content:

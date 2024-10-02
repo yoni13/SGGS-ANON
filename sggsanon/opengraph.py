@@ -28,7 +28,7 @@ def og():
     uname = post['uname']
     pub_time = post['pub_time']
 
-    content = BeautifulSoup(little_conponment.markdown_to_html_secure(post['content']), "html.parser").getText()
+    content = BeautifulSoup(little_conponment.markdown_to_html_secure(post['content'],True), "html.parser").getText()
 
     if len(content) > 30:
         content = content[:30] + ' ...'
