@@ -8,7 +8,6 @@ from markupsafe import escape
 import little_conponment
 import markdown
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
 
 mail = get_mail()
 limiter = limiter
@@ -129,35 +128,7 @@ def message_board_handle():
 
         for document in messages:
             content = document.get("content")
-            content = markdown.markdown(content)
-
-            soup = BeautifulSoup(content, 'html.parser')
-            ps = soup.find_all('p')
-            for p in ps:
-                try:
-                    if '\n' in p.string:
-                        p.string = p.string.replace("\n","<br>")
-                except TypeError:
-                    pass
-
-            links = soup.find_all('a')
-            for link in links:
-                if 'href' in link.attrs:
-                    url = link.attrs['href']
-                    parsed_result = urlparse(url)
-                    if parsed_result.scheme not in ['http', 'https']:
-                        link.attrs['href'] = ''
-                        link.attrs['target'] = '#'
-                        link.attrs['rel'] = 'noopener noreferrer'
-                        link.string = 'URL已被移除'
-                    else:
-                        link.attrs['target'] = '_blank'
-                        link.attrs['rel'] = 'noopener noreferrer'
-
-
-            content = str(soup)
-            if escape('<br>') in content:
-                content = content.replace(escape('<br>'),"<br>")
+            content = little_conponment.markdown_to_html_secure(content)
 
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
@@ -209,34 +180,7 @@ def messages_replys():
 
         for document in messages:
             content = document.get("content")
-            content = markdown.markdown(content)
-
-            soup = BeautifulSoup(content, 'html.parser')
-            ps = soup.find_all('p')
-            for p in ps:
-                try:
-                    if '\n' in p.string:
-                        p.string = p.string.replace("\n","<br>")
-                except TypeError:
-                    pass
-
-            links = soup.find_all('a')
-            for link in links:
-                if 'href' in link.attrs:
-                    url = link.attrs['href']
-                    parsed_result = urlparse(url)
-                    if parsed_result.scheme not in ['http', 'https']:
-                        link.attrs['href'] = ''
-                        link.attrs['target'] = '#'
-                        link.attrs['rel'] = 'noopener noreferrer'
-                        link.string = 'URL已被移除'
-                    else:
-                        link.attrs['target'] = '_blank'
-                        link.attrs['rel'] = 'noopener noreferrer'
-
-            content = str(soup)
-            if escape('<br>') in content:
-                content = content.replace(escape('<br>'),"<br>")
+            content = little_conponment.markdown_to_html_secure(content)
             
             if document.get("hidden") == True:
                 content = "此留言已被隱藏"
@@ -266,34 +210,7 @@ def messages_replys():
 
         for document in replys:
             content = document.get("content")
-            content = markdown.markdown(content)
-
-            soup = BeautifulSoup(content, 'html.parser')
-            ps = soup.find_all('p')
-            for p in ps:
-                try:
-                    if '\n' in p.string:
-                        p.string = p.string.replace("\n","<br>")
-                except TypeError:
-                    pass
-
-            links = soup.find_all('a')
-            for link in links:
-                if 'href' in link.attrs:
-                    url = link.attrs['href']
-                    parsed_result = urlparse(url)
-                    if parsed_result.scheme not in ['http', 'https']:
-                        link.attrs['href'] = ''
-                        link.attrs['target'] = '#'
-                        link.attrs['rel'] = 'noopener noreferrer'
-                        link.string = 'URL已被移除'
-                    else:
-                        link.attrs['target'] = '_blank'
-                        link.attrs['rel'] = 'noopener noreferrer'
-
-            content = str(soup)
-            if escape('<br>') in content:
-                content = content.replace(escape('<br>'),"<br>")
+            content = little_conponment.markdown_to_html_secure(content)
 
             if document.get("hidden") == True:
                 content = "此回覆已被隱藏"
