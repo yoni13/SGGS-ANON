@@ -22,8 +22,8 @@ def markdown_to_html_secure(markdown_text,img_to_text=False):
         except TypeError:
             pass
 
-        links = soup.find_all('a')
-        for link in links:
+    links = soup.find_all('a')
+    for link in links:
             if 'href' in link.attrs:
                 url = link.attrs['href']
                 parsed_result = urlparse(url)
