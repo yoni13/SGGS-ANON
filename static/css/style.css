@@ -488,3 +488,37 @@ hr {
     font-size: 20px;
     padding-left: 20px;
 }
+
+
+#redirect {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#redirect p {
+    word-break: break-all;
+}
+
+/* if desktop , use 25%*/
+@media screen and (min-width: 800px) {
+    #redirect img {
+        width: 25%;
+        height: 25%;
+        border-radius: 40px;
+    }
+    
+}
+
+/* if mobile , use 50%*/
+@media screen and (max-width: 800px) {
+    #redirect img {
+        width: 50%;
+        height: 50%;
+        border-radius: 40px;
+    }
+}
+
+#redirect a{
+    text-decoration: underline;
+    color: #ffffff;
+}

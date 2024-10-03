@@ -35,6 +35,7 @@ def markdown_to_html_secure(markdown_text,img_to_text=False):
                 else:
                     link.attrs['target'] = '_blank'
                     link.attrs['rel'] = 'noopener noreferrer'
+                    link.attrs['href'] = '/redirect?url=' + link.attrs['href']
 
 
         imgs = soup.find_all('img')

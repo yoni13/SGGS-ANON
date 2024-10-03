@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>匿名曙光留言板 | 不安全的連結!</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="/message_board"><img src="/static/img/logo.png" alt="SGGS logo">
+            <h1>匿名留言板</h1>
+        </a>
+    </div>
+    <div class="message" id="redirect">
+        <h1>這個網址被Google標記為不安全</h1>
+        <p>可能是惡意程式或是詐騙網站</p>
+        <p>{{ url }}</p>
+        <img src="/static/img/unsafe_site.gif" alt="unsafe site">
+        <p>已封鎖重新導向。</p>
+    </div>
+</body>
+
+</html>
