@@ -14,3 +14,4 @@ Pillow
 python-crontab
 markdown
 beautifulsoup4
+requests
