@@ -1,11 +1,12 @@
-from flask import Blueprint, abort, request, jsonify, session
-from app import db
+'''
+The module that manages api.
+'''
 import time
 import random
 import re
-from app import limiter
+from flask import Blueprint, abort, request, jsonify, session
 from flask_mail import Message
-from app import mail
+from app import db, limiter, mail
 import little_conponment
 
 api = Blueprint('api', __name__)
@@ -13,10 +14,16 @@ api = Blueprint('api', __name__)
 
 @api.route('/api/v1/')
 def index():
+    '''
+    This is the sggs-anon API v1
+    '''
     return 'This is the sggs-anon API v1'
 
 @api.route('/api/v1/bear')
 def bear():
+    '''
+    Api health test.
+    '''
     return jsonify({"bear": "ʕ·ᴥ·ʔ"})
 
 @api.route('/api/v1/mb_board/')
