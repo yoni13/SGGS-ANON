@@ -3,13 +3,12 @@ import time
 import re
 import hashlib
 import datetime
-from app import get_mail, limiter, db
+from app import mail, limiter, db
 from markupsafe import escape
 import little_conponment
 import markdown
 from bs4 import BeautifulSoup
 
-mail = get_mail()
 limiter = limiter
 
 
