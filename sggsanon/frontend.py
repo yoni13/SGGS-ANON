@@ -1,15 +1,16 @@
-from flask import Blueprint, redirect, request, render_template,abort, Response, session
+'''
+The module that manages frontend.
+'''
 import time
 import re
 import hashlib
 import datetime
-from app import mail, limiter, db
-from markupsafe import escape
-import little_conponment
 import markdown
 from bs4 import BeautifulSoup
-
-limiter = limiter
+from flask import Blueprint, redirect, request, render_template,abort, Response, session
+from markupsafe import escape
+from app import limiter, db
+import little_conponment
 
 
 frontend = Blueprint('frontend', __name__)
@@ -17,6 +18,9 @@ frontend = Blueprint('frontend', __name__)
 @frontend.route("/reg", methods=["GET", "POST"])
 @limiter.limit("5 per minute",methods=["POST"])
 def reg_handle():
+    '''
+    Register page.
+    '''
     if request.method == "GET":
         if session.get("user_info"):
             return redirect('/message_board')
@@ -56,7 +60,7 @@ def reg_handle():
 
         if len(upass) < 6:
             return '<script>alert("密碼長度需大於6！");history.back();</script>'
-        
+
         if len(upass) > 20:
             return '<script>alert("密碼長度需小於20！");history.back();</script>'
 
@@ -83,6 +87,9 @@ def reg_handle():
 
 @frontend.route("/logout")
 def logout_handle():
+    '''
+    Logout page.
+    '''
     if session.get("user_info"):
         session.pop("user_info")
     return redirect('/login')
@@ -91,6 +98,9 @@ def logout_handle():
 @frontend.route("/post_anonymous", methods=["GET", "POST"])
 @limiter.limit("2 per hour",methods=["POST"])
 def post_anonymous_handle():
+    '''
+    Page that allows anyone to post anonymously.
+    '''
     if request.method == "GET":
         return render_template("post_anonymous.html")
     elif request.method == "POST":
@@ -120,18 +130,21 @@ def post_anonymous_handle():
 @frontend.route("/message_board", methods=["GET", "POST"])
 @limiter.limit("1 per minute",methods=["POST"])
 def message_board_handle():
+    '''
+    Main page.
+    '''
     if request.method == "GET":
         messages = db.mb_message.find().sort({'_id':-1}).limit(10)
-        
+
         resp_dict = []
 
         for document in messages:
             content = document.get("content")
             content = little_conponment.markdown_to_html_secure(content)
 
-            if document.get("hidden") == True:
+            if document.get("hidden"):
                 content = "此留言已被隱藏"
-            
+
             like_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'like'})
             dislike_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'dislike'})
             laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
@@ -170,6 +183,9 @@ def message_board_handle():
 @frontend.route('/messages_replys', methods=['GET', 'POST'])
 @limiter.limit("5 per minute",methods=["POST"])
 def messages_replys():
+    '''
+    Reply message page.
+    '''
     if request.method == "GET":
         post_id = request.args.get("post_id")
         if not post_id:
@@ -180,8 +196,8 @@ def messages_replys():
         for document in messages:
             content = document.get("content")
             content = little_conponment.markdown_to_html_secure(content)
-            
-            if document.get("hidden") == True:
+
+            if document.get("hidden"):
                 content = "此留言已被隱藏"
 
             like_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'like'})
@@ -189,7 +205,7 @@ def messages_replys():
             laugh_count = db.mb_reaction.count_documents({"post_id": document.get("post_id"),'reaction':'laugh'})
 
             markdown_html_text = BeautifulSoup(markdown.markdown(document.get('content')), "html.parser").getText()
-            
+
             if len(markdown_html_text) > 20:
                 title = document.get('uname') + ' 說:' + markdown_html_text[:20] + '...'
             else:
@@ -199,7 +215,7 @@ def messages_replys():
                 title = '此留言已被隱藏'
 
             resp_dict.append((document.get("uname"), document.get("pub_time"), content,document.get("might_fake"),document.get("hidden"),like_count,dislike_count,laugh_count,document.get("post_id"),title))
-        if resp_dict == []:
+        if not resp_dict:
             abort(404)
 
         resp_messages = resp_dict
@@ -211,7 +227,7 @@ def messages_replys():
             content = document.get("content")
             content = little_conponment.markdown_to_html_secure(content)
 
-            if document.get("hidden") == True:
+            if document.get("hidden"):
                 content = "此回覆已被隱藏"
 
             replys_dict.append((document.get("uname"), document.get("pub_time"), content, document.get("might_fake"), document.get("hidden")))
@@ -251,6 +267,9 @@ def messages_replys():
 
 @frontend.route("/login", methods=["GET", "POST"])
 def login_handle():
+    '''
+    Login page.
+    '''
     if request.method == "GET":
         if session.get("user_info"):
             if request.args.get("after"):
@@ -294,10 +313,13 @@ def login_handle():
                 return redirect('/messages_replys?post_id=' + request.args.get("post_id"))
             elif request.args.get("after") == "mod":
                 return redirect('/mod')
-            
+
         return redirect('/message_board')
 
 
 @frontend.route('/')
-def test():
+def root():
+    '''
+    Root route.
+    '''
     return render_template('root.html')
