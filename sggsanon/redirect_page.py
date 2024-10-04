@@ -10,7 +10,7 @@ redirect_page = Blueprint('redirect_page', __name__)
 
 
 @redirect_page.route('/redirect')
-def redirect_page():
+def redirect_page_function():
     '''
     Redirect page.
     '''
