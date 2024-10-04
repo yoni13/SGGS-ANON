@@ -14,6 +14,9 @@ def redirect_page_function():
     '''
     Redirect page.
     '''
+    if request.headers.get('referer') is None:
+        return abort(403)
+
     url = request.args.get('url')
     # google safe broswring api v4
     r_body =   {

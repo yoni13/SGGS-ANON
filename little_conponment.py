@@ -46,7 +46,7 @@ def markdown_to_html_secure(markdown_text,img_to_text=False):
                 link.string = 'URL已被移除'
             else:
                 link.attrs['target'] = '_blank'
-                link.attrs['rel'] = 'noopener noreferrer'
+                link.attrs['rel'] = 'noopener'
                 link.attrs['href'] = '/redirect?url=' + link.attrs['href']
 
 
