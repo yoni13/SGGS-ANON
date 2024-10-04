@@ -38,8 +38,8 @@ def markdown_to_html_secure(markdown_text,img_to_text=False):
                     link.attrs['href'] = '/redirect?url=' + link.attrs['href']
 
 
-        imgs = soup.find_all('img')
-        for img in imgs:
+    imgs = soup.find_all('img')
+    for img in imgs:
             img.attrs['src'] = 'https://imgpreview-proxy.nicewhite.xyz/' + img.attrs['src']
             if img_to_text:
                 img.string = '(圖片)'
