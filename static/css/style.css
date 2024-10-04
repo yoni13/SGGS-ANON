@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Orienta&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
 * {
     position: relative;
@@ -446,6 +446,9 @@ hr {
     overflow: hidden;
     max-width: max-content;
     letter-spacing: 10px;
+    font-family: "Noto Color Emoji", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 @media screen and (max-width: 800px) { /* Mobile */
