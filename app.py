@@ -1,11 +1,15 @@
- # Global APP settings
+'''
+Main control for entire app.
+'''
+import os
 from flask import Flask, request
 from flask_mail import Mail
 from pymongo import MongoClient
-import os
 from flask_limiter import Limiter
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
+from sggsanon import api, moderation, static_files, frontend, opengraph, redirect_page
+
 
 app = Flask(__name__)
 app.secret_key = os.environ['app_secret_key']
@@ -14,7 +18,13 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 csrf = CSRFProtect(app)
 
 def get_remote_address():
-    return request.headers.get('cf-connecting-ip') if request.headers.get('cf-connecting-ip') else request.remote_addr
+    '''
+    Get real user ip instead of cloudflare's ip
+    '''
+    if request.headers.get('cf-connecting-ip'):
+        return request.headers.get('cf-connecting-ip')
+    else:
+        return request.remote_addr
 
 
 limiter = Limiter(
@@ -46,9 +56,12 @@ if not os.path.isdir("tmp"):
     os.mkdir("tmp")
 
 def get_mail():
+    '''
+    Make mail object available for other modules.
+    '''
     return mail
 
-from sggsanon import api, moderation, static_files, frontend, opengraph, redirect_page
+
 app.register_blueprint(api.api)
 app.register_blueprint(moderation.mod)
 app.register_blueprint(static_files.static_files)

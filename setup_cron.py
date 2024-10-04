@@ -1,3 +1,6 @@
+'''
+Script that manages cron that deletes image cache.
+'''
 from crontab import CronTab
 cron = CronTab(user='root')
 job = cron.new(command='rm -rf /python-docker/tmp/*')
