@@ -8,8 +8,6 @@ from pymongo import MongoClient
 from flask_limiter import Limiter
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
-from sggsanon import api, moderation, static_files, frontend, opengraph, redirect_page
-
 
 app = Flask(__name__)
 app.secret_key = os.environ['app_secret_key']
@@ -55,12 +53,9 @@ mail = Mail(app)
 if not os.path.isdir("tmp"):
     os.mkdir("tmp")
 
-def get_mail():
-    '''
-    Make mail object available for other modules.
-    '''
-    return mail
 
+
+from sggsanon import api, moderation, static_files, frontend, opengraph, redirect_page
 
 app.register_blueprint(api.api)
 app.register_blueprint(moderation.mod)

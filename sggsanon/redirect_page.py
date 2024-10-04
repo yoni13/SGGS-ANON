@@ -1,12 +1,19 @@
-from flask import Blueprint, render_template,redirect,request,abort
-import requests
+'''
+The modules that manages redirect page.
+'''
 import os
+from flask import Blueprint, render_template, request, abort
+import requests
+
 
 redirect_page = Blueprint('redirect_page', __name__)
 
 
 @redirect_page.route('/redirect')
-def redirect():
+def redirect_page():
+    '''
+    Redirect page.
+    '''
     url = request.args.get('url')
     # google safe broswring api v4
     r_body =   {
@@ -23,7 +30,7 @@ def redirect():
           ]
         }
       }
-    api_response = requests.post(f'https://safebrowsing.googleapis.com/v4/threatMatches:find?key={os.environ.get("GOOGLE_SAFE_BROSWERING_API_KEY")}',json=r_body)
+    api_response = requests.post(f'https://safebrowsing.googleapis.com/v4/threatMatches:find?key={os.environ.get("GOOGLE_SAFE_BROSWERING_API_KEY")}',json=r_body,timeout=60)
 
     if api_response.status_code != 200:
         print('Error in google safe broswring api')
