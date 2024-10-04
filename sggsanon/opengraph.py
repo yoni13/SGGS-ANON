@@ -1,6 +1,9 @@
+'''
+Modules that manages opengraph.
+'''
+import os
 from flask import Blueprint, request, abort, send_from_directory
 from PIL import Image, ImageDraw, ImageFont
-import os
 from bs4 import BeautifulSoup
 import little_conponment
 
@@ -11,6 +14,9 @@ opengraph = Blueprint('opengraph', __name__)
 @opengraph.route('/opengraph')
 @limiter.limit("1 per second")
 def og():
+    '''
+    Api for opengraph.
+    '''
     if not request.args.get('post_id'):
         abort(400)
 
@@ -32,8 +38,7 @@ def og():
 
     if len(content) > 30:
         content = content[:30] + ' ...'
-    else:
-        content = content
+
     if post['hidden']:
         content = '此留言已被隱藏'
     like_count = db.mb_reaction.count_documents({'post_id': post_id, 'reaction': 'like'})
@@ -41,7 +46,7 @@ def og():
     laugh_count = db.mb_reaction.count_documents({'post_id': post_id, 'reaction': 'laugh'})
 
     img = Image.open("static/img/opengraph.png")
-    
+
     draw = ImageDraw.Draw(img)
     # font = ImageFont.truetype(<font-file>, <font-size>)
     font = ImageFont.truetype("ChocolateClassicalSans-Regular.ttf", 60)
@@ -70,6 +75,9 @@ def og():
 
 @opengraph.route('/oembedapi')
 def oembedapi():
+    '''
+    Api gathering ombed.
+    '''
     if not request.args.get('post_id'):
         abort(400)
     post = db.mb_message.find_one({"post_id": request.args.get('post_id')})
@@ -80,7 +88,7 @@ def oembedapi():
         title = post['uname'] + ' 說:' + content[:20] + '...'
     else:
         title = post['uname'] + ' 說:' + content
-    
+
     json_template = {
         "author_name":  title,
         "author_url": "https://"+request.host,

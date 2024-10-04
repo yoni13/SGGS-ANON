@@ -1,3 +1,6 @@
+'''
+Module that controls moderation.
+'''
 from flask import Blueprint, render_template, abort, request, jsonify, Response,session, redirect
 from app import db
 
@@ -6,6 +9,9 @@ mod = Blueprint('mod', __name__)
 
 @mod.route('/mod')
 def mod_():
+    '''
+    Main moderation page.
+    '''
     user_info = session.get("user_info")
     if not user_info:
         return redirect('/login?after=mod')
@@ -13,7 +19,7 @@ def mod_():
         return Response("權限不足！")
     if request.method == "GET":
         messages = db.mb_message.find().sort({'_id':-1}).limit(10)
-        
+
         resp_dict = []
 
         for document in messages:
@@ -28,13 +34,16 @@ def mod_():
         return render_template("moderation.html", messages=resp_messages)
 
 @mod.route('/mod/moderation_posts', methods=['GET', 'POST'])
-def mod_reply():
+def mod_post():
+    '''
+    Managing posts.
+    '''
     user_info = session.get("user_info")
     if not user_info:
         return redirect('/login?after=mod')
     if user_info.get("priv") < 2:
         return Response("權限不足！")
-    
+
     post_id = request.args.get("post_id")
 
     if request.method == "POST":
@@ -43,15 +52,15 @@ def mod_reply():
         if request.json.get("action") == "hide":
             if user_info.get("priv") < 3:
                 return jsonify({"err": 1, "desc": "權限不足！"})
-            if db.mb_message.find_one({"post_id": post_id}).get("hidden") == True:
+            if db.mb_message.find_one({"post_id": post_id}).get("hidden"):
                 db.mb_message.update_one({"post_id": post_id}, {"$set": {"hidden": False}})
                 return jsonify({"err": 0, "desc": "已顯示！"})
             else:
                 db.mb_message.update_one({"post_id": post_id}, {"$set": {"hidden": True}})
                 return jsonify({"err": 0, "desc": "已隱藏！"})
-            
+
         elif request.json.get("action") == "mark":
-            if db.mb_message.find_one({"post_id": post_id}).get("might_fake") == True:
+            if db.mb_message.find_one({"post_id": post_id}).get("might_fake"):
                 db.mb_message.update_one({"post_id": post_id}, {"$set": {"might_fake": False}})
                 return jsonify({"err": 0, "desc": "已取消標記！"})
             else:
@@ -71,7 +80,7 @@ def mod_reply():
             else:
                 content = document.get("content")
             resp_dict.append((document.get("uname"), document.get("pub_time"), content))
-        if resp_dict == []:
+        if not resp_dict:
             abort(400)
 
         resp_messages = resp_dict
@@ -94,12 +103,15 @@ def mod_reply():
 
 @mod.route('/mod/moderation_replys', methods=['GET', 'POST'])
 def mod_replys():
+    '''
+    Moderating replys.
+    '''
     user_info = session.get("user_info")
     if not user_info:
         return redirect('/login?after=mod')
     if user_info.get("priv") < 2:
         return Response("權限不足！")
-    
+
     reply_id = request.args.get("reply_id")
 
     if request.method == "POST":
@@ -108,15 +120,15 @@ def mod_replys():
         if request.json.get("action") == "hide":
             if user_info.get("priv") < 3:
                 return jsonify({"err": 1, "desc": "權限不足！"})
-            if db.mb_replys.find_one({"reply_id": reply_id}).get("hidden") == True:
+            if db.mb_replys.find_one({"reply_id": reply_id}).get("hidden"):
                 db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"hidden": False}})
                 return jsonify({"err": 0, "desc": "已顯示！"})
             else:
                 db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"hidden": True}})
                 return jsonify({"err": 0, "desc": "已隱藏！"})
-            
+
         elif request.json.get("action") == "mark":
-            if db.mb_replys.find_one({"reply_id": reply_id}).get("might_fake") == True:
+            if db.mb_replys.find_one({"reply_id": reply_id}).get("might_fake"):
                 db.mb_replys.update_one({"reply_id": reply_id}, {"$set": {"might_fake": False}})
                 return jsonify({"err": 0, "desc": "已取消標記！"})
             else:
@@ -136,7 +148,7 @@ def mod_replys():
             else:
                 content = document.get("content")
             resp_dict.append((document.get("uname"), document.get("pub_time"), content))
-        if resp_dict == []:
+        if not resp_dict:
             abort(400)
 
         resp_messages = resp_dict

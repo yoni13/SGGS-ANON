@@ -28,7 +28,9 @@ def bear():
 
 @api.route('/api/v1/mb_board/')
 def mb_board():
-
+    '''
+    Api for getting main board
+    '''
     if session.get("user_info"):
         logined = True
     else:
@@ -57,7 +59,7 @@ def mb_board():
             content = '此留言已被隱藏'
         else:
             content = little_conponment.markdown_to_html_secure(data['content'])
-        
+
         info = {'uname': data['uname'], 'content': content, 'pub_time': data['pub_time'], 'post_id': data['post_id'], 'replys_count': replys_count,'might_fake': data['might_fake'],'hidden': data['hidden'],'like':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "like"}),'dislike':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "dislike"}),'laugh':db.mb_reaction.count_documents({"post_id": data['post_id'], "reaction": "laugh"}),'login':logined}
         res.append(info)
 
@@ -65,11 +67,14 @@ def mb_board():
         res = list(res)
     else:
         res = list(reversed(res))
-        
+
     return jsonify(res)
 
 @api.route('/api/v1/mb_replys/')
 def mb_board_post():
+    '''
+    Api for getting reply data.
+    '''
     post_id = request.args.get('post_id')
     if not post_id:
         return jsonify({"error": "post_id is required"}), 400
@@ -77,7 +82,7 @@ def mb_board_post():
     if request.args.get('limit'):
         if not request.args.get('limit').isdigit():
             return jsonify({"error": "limit must be a number"}), 400
-        
+
         limit = int(request.args.get('limit'))
     else:
         limit = 10
@@ -95,7 +100,7 @@ def mb_board_post():
                {'uname': data['uname'], 'content': data['content'], 'pub_time': data['pub_time'], 'post_id': data['post_id']}
                 }
         replysres = []
-        
+
         replys = db.mb_replys.find({'post_id': post_id}).limit(limit).skip((page-1)*limit)
         for reply in replys:
             if reply['hidden']:
@@ -111,10 +116,15 @@ def mb_board_post():
         return jsonify(res)
     else:
         return abort(400)
-    
+
 @api.route('/api/v1/send_email_code', methods=['POST'])
 @limiter.limit("1/second")
 def send_email_code():
+    '''
+    This api send email code
+
+    {"email":email}
+    '''
     email = request.json.get('email')
     if not email:
         return jsonify({"err": 1, "desc": "請輸入信箱！"})
@@ -140,7 +150,10 @@ def send_email_code():
 
 @api.route('/api/v1/reaction', methods=['POST'])
 @limiter.limit("5/second")
-def reactionAPI():
+def reaction_api():
+    '''
+    Reaction api for posts.
+    '''
     post_id = request.json.get('post_id')
     reaction = request.json.get('reaction')
 
@@ -151,13 +164,13 @@ def reactionAPI():
 
     if not post_id or not reaction:
         return jsonify({"err": 1, "desc": "post_id and reaction is required!"})
-    
+
     if reaction not in ['like', 'dislike','laugh']:
         return jsonify({"err": 1, "desc": "reaction must one of like, dislike, laugh"})
-    
+
     if not db.mb_message.find_one({"post_id": post_id}):
         return jsonify({"err": 1, "desc": "post_id not exist!"})
-    
+
 
     if db.mb_reaction.find_one({"post_id": post_id, "uname": user_info['uname']}):
         try:
@@ -174,4 +187,3 @@ def reactionAPI():
         reactions.append(db.mb_reaction.count_documents({"post_id": post_id, "reaction": i}))
 
     return jsonify({"err": 0, "desc": "success", "reaction": reactions})
-
