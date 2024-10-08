@@ -124,6 +124,8 @@ def post_anonymous_handle():
                     "might_fake": False
                 })
                 return redirect('/message_board')
+            else:
+                return '<script>alert("留言不能大於200字或沒有字！");history.back();</script>'
         else:
             return '<script>alert("留言不能為空！");history.back();</script>'
 
