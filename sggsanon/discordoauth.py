@@ -22,15 +22,14 @@ def discord_callback():
     response = requests.post(TOKEN_URL, data=data, headers=headers)
     response_data = response.json()
     
-    return response_data
 
-    # access_token = str(response_data['access_token'])
-    # headers = {
-    #     'Authorization': f"Bearer {access_token}",
-    #     'Accept': 'application/json',
-    # }
-    # response = requests.get(API_URL_BASE, headers=headers)
-    # return response.json()
+    access_token = str(response_data['access_token'])
+    headers = {
+        'Authorization': f"Bearer {access_token}",
+        'Accept': 'application/json',
+    }
+    response = requests.get(API_URL_BASE, headers=headers)
+    return response.json()
 
 
  
