@@ -40,7 +40,7 @@ def discordoauthlogin():
         'client_id': OAUTH2_CLIENT_ID,
         'redirect_uri': REDIRECT_URI,
         'response_type': 'code',
-        'scope': 'identify guilds',
+        'scope': 'identify guilds email',
     }
     url = f"{AUTHORIZE_URL}?{requests.compat.urlencode(params)}"
     return redirect(url)
