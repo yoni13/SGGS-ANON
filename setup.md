@@ -15,6 +15,8 @@ Discord
 `DISCORD_OAUTH_CLIENT_ID` -> Discord OAUTH client id  
 `DISCORD_OAUTH_CLIENT_SECURITE` -> Discord OAUTH client secret  
 `DISCORD_OAUTH_TOKEN` ->  Discord OAUTH TOKEN  
+`DISCORD_OAUTH_REDIRECT_URL` -> Discord redirect url (callback url)
+`DISCORD_OAUTH_AUTH_URL` -> Discord oauth auth url (startwith:https://discord.com/oauth2/authorize)
 
 
 

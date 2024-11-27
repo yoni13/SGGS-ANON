@@ -3,7 +3,7 @@ Module that controls Discord Oauth.
 '''
 from flask import Blueprint,redirect,request
 import requests
-from app import OAUTH2_CLIENT_ID, OAUTH2_CLIENT_SECRET, REDIRECT_URI, AUTHORIZE_URL, TOKEN_URL, API_URL_BASE
+from app import OAUTH2_CLIENT_ID, OAUTH2_CLIENT_SECRET, REDIRECT_URI, TOKEN_URL, API_URL_BASE
 
 
 discordoauth = Blueprint('discordoauth', __name__)
@@ -20,27 +20,15 @@ def discord_callback():
     }
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.post(TOKEN_URL, data=data, headers=headers)
-    response_data = response.json()
-    
-
-    access_token = str(response_data['access_token'])
+    try:
+        access_token = response.json()['access_token']
+    except KeyError:
+        return "<script>alert('Erorr while trying to get userdata, perhaps try again?');document"
     headers = {
         'Authorization': f"Bearer {access_token}",
         'Accept': 'application/json',
     }
-    response = requests.get(API_URL_BASE, headers=headers)
-    return response.json()
+    getdata = requests.get(API_URL_BASE, headers=headers)
+    return getdata.json()
 
 
- 
-
-@discordoauth.route('/auth/discord/login')
-def discordoauthlogin():
-    params = {
-        'client_id': OAUTH2_CLIENT_ID,
-        'redirect_uri': REDIRECT_URI,
-        'response_type': 'code',
-        'scope': 'identify email',
-    }
-    url = f"{AUTHORIZE_URL}?{requests.compat.urlencode(params)}"
-    return redirect(url)
