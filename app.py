@@ -56,7 +56,7 @@ if not os.path.isdir("tmp"):
 # DISCORD
 OAUTH2_CLIENT_ID = os.environ['DISCORD_OAUTH_CLIENT_ID']  # Your CLIENT ID
 OAUTH2_CLIENT_SECRET = os.environ['DISCORD_OAUTH_CLIENT_SECURITE']  # Your CLIENT SECRET
-REDIRECT_URI = 'http://localhost:5000/callback'  # Update as needed
+REDIRECT_URI = os.environ['DISCORD_OAUTH_REDIRECT_URL']
 
 AUTHORIZE_URL = 'https://discord.com/api/oauth2/authorize'
 TOKEN_URL = 'https://discord.com/api/oauth2/token'
