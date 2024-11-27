@@ -3,7 +3,7 @@ Module that controls Discord Oauth.
 '''
 from flask import Blueprint,redirect,request
 import requests
-from app import OAUTH2_CLIENT_ID,OAUTH2_CLIENT_SECRET,REDIRECT_URI,AUTHORIZE_URL,TOKEN_URL
+from app import OAUTH2_CLIENT_ID, OAUTH2_CLIENT_SECRET, REDIRECT_URI, AUTHORIZE_URL, TOKEN_URL, API_URL_BASE
 
 
 discordoauth = Blueprint('discordoauth', __name__)
@@ -22,7 +22,13 @@ def discord_callback():
     response = requests.post(TOKEN_URL, data=data, headers=headers)
     response_data = response.json()
 
-    return response_data['access_token']
+    headers = {
+        'Authorization': f'Bearer {response_data['access_token']}',
+        'Accept': 'application/json',
+    }
+    response = requests.get(API_URL_BASE, headers=headers)
+    return response.json()
+
  
 
 @discordoauth.route('/auth/discord/login')
