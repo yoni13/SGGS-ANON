@@ -21,13 +21,8 @@ def discord_callback():
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.post(TOKEN_URL, data=data, headers=headers)
     response_data = response.json()
-    access_token = response_data['access_token']
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Accept': 'application/json',
-    }
-    response = requests.get(API_URL_BASE, headers=headers)
-    return response.json()
+
+    return response_data['access_token']
 
  
 
