@@ -59,7 +59,7 @@ OAUTH2_CLIENT_SECRET = os.environ['DISCORD_OAUTH_CLIENT_SECURITE']  # Your CLIEN
 REDIRECT_URI = 'http://localhost:5000/callback'  # Update as needed
 
 AUTHORIZE_URL = 'https://discord.com/api/oauth2/authorize'
-TOKEN_URL = 'https://discord.com/api/oauth2/' + os.environ['DISCORD_OAUTH_TOKEN']
+TOKEN_URL = 'https://discord.com/api/oauth2/token'
 API_URL_BASE = 'https://discord.com/api/users/@me'
 
 
