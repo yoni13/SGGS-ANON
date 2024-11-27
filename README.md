@@ -1,5 +1,7 @@
 # SGGS-ANON 匿名曙光留言板
 
+## Setup
+Check [setup.md](setup.md)
 
 ## 系統
 
