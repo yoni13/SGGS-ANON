@@ -63,7 +63,7 @@ TOKEN_URL = 'https://discord.com/api/oauth2/token'
 API_URL_BASE = 'https://discord.com/api/users/@me'
 
 
-from sggsanon import api, moderation, static_files, frontend, opengraph, redirect_page
+from sggsanon import api, moderation, static_files, frontend, opengraph, redirect_page, discordoauth
 
 app.register_blueprint(api.api)
 app.register_blueprint(moderation.mod)
@@ -71,6 +71,7 @@ app.register_blueprint(static_files.static_files)
 app.register_blueprint(frontend.frontend)
 app.register_blueprint(opengraph.opengraph)
 app.register_blueprint(redirect_page.redirect_page)
+app.register_blueprint(discordoauth.discordoauth)
 
 
 if __name__ == "__main__":
