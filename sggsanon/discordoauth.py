@@ -26,7 +26,7 @@ def discord_callback():
     try:
         access_token = response.json()['access_token']
     except KeyError:
-        return "<script>alert('Erorr while trying to get userdata, perhaps try again?');history.back();"
+        return "<script>alert('Erorr while trying to get userdata, perhaps try again?');history.back();</script>"
     headers = {
         'Authorization': f"Bearer {access_token}",
         'Accept': 'application/json',
@@ -34,7 +34,7 @@ def discord_callback():
     getdata = requests.get(API_URL_BASE, headers=headers).json()
     
     if not getdata['verified']:
-        return "<script>alert('Please verify your discord mail address in the discord app.');history.back();"
+        return "<script>alert('Please verify your discord mail address in the discord app.');history.back();</script>"
     
     if db.mb_user.find_one({"email": getdata['email']}):
         dbres = db.mb_user.find_one({"email": getdata['email']})
