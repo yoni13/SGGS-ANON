@@ -19,13 +19,6 @@ def index():
     '''
     return 'This is the sggs-anon API v1'
 
-@api.route('/api/v1/bear')
-def bear():
-    '''
-    Api health test.
-    '''
-    return jsonify({"bear": "ʕ·ᴥ·ʔ"})
-
 @api.route('/api/v1/mb_board/')
 def mb_board():
     '''
@@ -46,6 +39,8 @@ def mb_board():
     if request.args.get('page'):
         if not request.args.get('page').isdigit():
             return abort(400, 'page must be a number')
+        if int(request.args.get('page')) == 0:
+            return abort(400, 'ru a hacker? owo')
         page = int(request.args.get('page'))
     else:
         page = 1
@@ -90,6 +85,8 @@ def mb_board_post():
     if request.args.get('page'):
         if not request.args.get('page').isdigit():
             return jsonify({"error": "page must be a number"}), 400
+        if int(request.args.get('page')) == 0:
+            return abort(400, 'ru a hacker? owo')
         page = int(request.args.get('page'))
     else:
         page = 1
