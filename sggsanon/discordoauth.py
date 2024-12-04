@@ -68,5 +68,12 @@ def discord_callback():
                 "state": 1, # 1: normal, 2: banned,
                 "usingOauth":True # if using oauth,disable login via password
             })
+        session["user_info"] = {
+                    "uname": uname,
+                    "email": getdata['email'],
+                    "priv": 1,
+                    "state": 1,
+                    "current_login_time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                }
         return redirect('/message_board')
 
