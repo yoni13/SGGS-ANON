@@ -47,6 +47,8 @@ def discord_callback():
                 }
         db.mb_user.update_one({"email": getdata['email']}, {"$set": {"last_login_time": datetime.datetime.now()}})
 
+        return redirect('/message_board')
+
     else:
         uname = getdata['global_name']
 
@@ -66,5 +68,5 @@ def discord_callback():
                 "state": 1, # 1: normal, 2: banned,
                 "usingOauth":True # if using oauth,disable login via password
             })
-
+        return redirect('/message_board')
 
